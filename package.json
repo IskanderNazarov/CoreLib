@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "displayName": "Nazzalex Core Library",
   "description": "Base services for web games using plugins Playgama and GamePush",
-  "unity": "6000.0.61",
+  "unity": "6000.0",
   "author": {
     "name": "Alex",
     "email": "fighter.nazarov@gmail.com"
