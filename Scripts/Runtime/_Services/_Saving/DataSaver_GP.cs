@@ -1,40 +1,47 @@
-﻿using System;
+﻿// File: Scripts/Runtime/_Services/_Saving/DataSaver_GP.cs
+using System;
 using System.Collections;
 using Core._Services._Saving;
 using GamePush;
 using UnityEngine;
 using UnityEngine.Events;
+using __CoreGameLib._Scripts._Utils; // for timeout helper
 
 namespace __CoreGameLib._Scripts._Services._Saving {
     public class DataSaver_GP : IDataSaver {
-        
+        private const float LOAD_TIMEOUT = 5.0f; // max wait time
+
         public IEnumerator Load(string key, Action<string> onLoaded) {
-            bool isDone = false;
+            var isDone = false;
 
             UnityAction onComplete = () => { isDone = true; };
             UnityAction onError = () => { 
-                Debug.LogWarning("[DataSaver_GP] Load error"); 
+                Debug.LogWarning("// DataSaver_GP: Load error callback"); 
                 isDone = true; 
             };
 
             GP_Player.OnLoadComplete += onComplete;
             GP_Player.OnLoadError += onError;
 
-            GP_Player.Load(); // Загружаем профиль игрока из сети
+            GP_Player.Load();
 
-            yield return new WaitUntil(() => isDone);
+            // wait until done or timeout reached
+            yield return new WaitForMaxOfSecondsOrWhile(LOAD_TIMEOUT, () => !isDone);
 
             GP_Player.OnLoadComplete -= onComplete;
             GP_Player.OnLoadError -= onError;
 
-            // Достаем JSON из поля GamePush
-            string loadedString = GP_Player.GetString(key);
+            if (!isDone) {
+                Debug.LogWarning($"// DataSaver_GP: Load timed out after {LOAD_TIMEOUT}s");
+            }
+
+            var loadedString = GP_Player.GetString(key);
             onLoaded?.Invoke(loadedString);
         }
 
         public void Save(string key, string json) {
             GP_Player.Set(key, json);
-            GP_Player.Sync(); // Синхронизируем. Защита от спама будет в SaveManager!
+            GP_Player.Sync();
         }
 
         public void Delete(string key) {

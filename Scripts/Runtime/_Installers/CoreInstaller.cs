@@ -32,18 +32,28 @@ namespace __CoreGameLib._Scripts._Installers {
         }
 
         private void InstallFor_Playgama() {
+#if UNITY_EDITOR
+            Container.Bind<IDataSaver>().To<DataSaver_Editor>().AsSingle();
+#else    
+            Container.Bind<IDataSaver>().To<DataSaver_PG>().FromNew().AsSingle().NonLazy();
+#endif
+            
             Container.BindInterfacesAndSelfTo<AdsService_PG>().FromNew().AsSingle();
             Container.BindInterfacesAndSelfTo<Purchaser_PG>().FromNew().AsSingle();
-            Container.Bind<IDataSaver>().To<DataSaver_PG>().FromNew().AsSingle().NonLazy();
             Container.Bind<IRemoteConfig>().To<RemoteConfig_PG>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_PG>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_PG>().AsSingle().NonLazy();
         }
 
         private void InstallFor_GamePush() {
+#if UNITY_EDITOR
+            Container.Bind<IDataSaver>().To<DataSaver_Editor>().AsSingle();
+#else    
+            Container.Bind<IDataSaver>().To<DataSaver_GP>().FromNew().AsSingle()/*.WithArguments(_projectSettings.PublicKeysFor_GP)*/.NonLazy();
+#endif
+            
             Container.BindInterfacesAndSelfTo<AdsService_GP>().FromNew().AsSingle().WithArguments(_projectSettings);
             Container.BindInterfacesAndSelfTo<Purchaser_GP>().FromNew().AsSingle();
-            Container.Bind<IDataSaver>().To<DataSaver_GP>().FromNew().AsSingle()/*.WithArguments(_projectSettings.PublicKeysFor_GP)*/.NonLazy();
             Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
