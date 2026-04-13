@@ -1,8 +1,8 @@
 ﻿// Файл: Core/Ads/AdsService_PG.cs
 
 using System;
+using _Data;
 using _Services._PlatformActions;
-using _Services._ScriptableObjects;
 using Playgama;
 using Playgama.Modules.Advertisement;
 using UnityEngine;

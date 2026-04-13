@@ -1,6 +1,6 @@
 ﻿//using _Services._ScriptableObjects;
 
-using _Services._ScriptableObjects;
+using _Data;
 
 namespace _Services._PlatformActions {
     public interface IPlatformActionProvider {

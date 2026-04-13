@@ -1,8 +1,8 @@
 ﻿// Файл: Core/Services/Lang/PlatformActionProvider_PG.cs
 
 using System;
+using _Data;
 using _Services._PlatformActions;
-using _Services._ScriptableObjects;
 using Playgama;
 
 namespace _Infrastructure {

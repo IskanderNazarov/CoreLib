@@ -1,7 +1,7 @@
 ﻿// Файл: Core/Ads/AdsService_GP.cs
 using System;
+using _Data;
 using _Services._PlatformActions;
-using _Services._ScriptableObjects;
 using GamePush;
 using UnityEngine;
 using Zenject;
