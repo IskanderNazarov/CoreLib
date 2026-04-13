@@ -1,5 +1,3 @@
-using __CoreGameLib._Scripts._ScriptableObjects;
-using __CoreGameLib._Scripts._Services._Lang;
 using __CoreGameLib._Scripts._Services._Leaderboards;
 using __CoreGameLib._Scripts._Services._Purchasing;
 using __CoreGameLib._Scripts._Services._RemoteConfig;
@@ -7,7 +5,9 @@ using __CoreGameLib._Scripts._Services._Saving;
 using _Infrastructure;
 using _Infrastructure.Services._Leaderboards;
 using _Services;
+using _Services._PlatformActions;
 using _Services._Saving;
+using _Services._ScriptableObjects;
 using Core._Purchasing;
 using Core._Services;
 using Core._Services._Saving;
@@ -30,7 +30,6 @@ namespace __CoreGameLib._Scripts._Installers {
 
             Container.Bind<ProjectSettings>().FromScriptableObject(_projectSettings).AsSingle();
             Container.Bind<SoundManager>().FromNew().AsSingle().NonLazy();
-            Container.Bind<CurrencyManager>().FromNew().AsSingle().NonLazy();
             Container.Bind<RewardHandler>().FromNew().AsSingle().NonLazy();
         }
 

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using __CoreGameLib._Scripts._Services._Lang;
 using __CoreGameLib._Scripts._Services._RemoteConfig;
 using _Services._Saving;
 using Playgama;

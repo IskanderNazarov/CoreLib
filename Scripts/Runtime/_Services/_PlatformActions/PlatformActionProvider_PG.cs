@@ -1,27 +1,43 @@
-﻿using __CoreGameLib._Scripts._ScriptableObjects;
-using __CoreGameLib._Scripts._Services._Lang;
-using Playgama;
-using Playgama.Modules.Platform;
-using Zenject;
+﻿// Файл: Core/Services/Lang/PlatformActionProvider_PG.cs
 
-namespace __CoreGameLib._Scripts {
+using System;
+using _Services._PlatformActions;
+using _Services._ScriptableObjects;
+using Playgama;
+
+namespace _Infrastructure {
     public class PlatformActionProvider_PG : IPlatformActionProvider {
-        [Inject] private ProjectSettings _projectSettings;
+        
+        public SupportedPlatform GetCurrentPlatform() {
+            // Playgama возвращает string. Переводим его в наш SupportedPlatform.
+            // Строки нужно сверять с официальной документацией Playgama
+            string platformId = Bridge.platform.id?.ToLower() ?? "";
+            
+            return platformId switch {
+                "yandex" => SupportedPlatform.Yandex,
+                "vk" => SupportedPlatform.VK,
+                "crazy_games" => SupportedPlatform.CrazyGames,
+                "poki" => SupportedPlatform.Poki,
+                "game_distribution" => SupportedPlatform.GameDistribution,
+                "gamepix" => SupportedPlatform.GamePix,
+                _ => SupportedPlatform.Unknown
+            };
+        }
 
         public string GetISO() {
-            return Bridge.platform.language;
+            throw new NotImplementedException();
         }
 
         public void CallGameReadyAPI() {
-            Bridge.platform.SendMessage(PlatformMessage.GameReady);
+            throw new NotImplementedException();
         }
 
         public void SetMinimalDelayForInterstitial() {
-            Bridge.advertisement.SetMinimumDelayBetweenInterstitial(_projectSettings.minimumDelayBetweenInterstitial);
+            throw new NotImplementedException();
         }
 
         public bool IsRemoteConfigSupported() {
-            return Bridge.remoteConfig.isSupported;
+            throw new NotImplementedException();
         }
     }
 }

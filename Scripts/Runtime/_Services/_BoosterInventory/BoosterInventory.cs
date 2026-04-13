@@ -1,42 +1,29 @@
-// file: assets/_coregame/_scripts/boosters/boosterinventory.cs
-// assembly: corelib.asmdef
-
+// Файл: Assets/_CoreGame/_Scripts/Boosters/BoosterInventory.cs
+// Сборка: CoreLib.asmdef
 using System;
 using System.Collections.Generic;
-using Core._Services._Saving;
 using UnityEngine;
 using Zenject;
 
 namespace core.boosters {
-    // the implementation is now generic
-    public class BoosterInventory<TBoosterId> : IBoosterInventory<TBoosterId>, IInitializable
+    
+    public abstract class BoosterInventory<TBoosterId> : IBoosterInventory<TBoosterId>, IInitializable
         where TBoosterId : Enum {
-        private readonly IDataSaver _dataSaver;
+        
         private Dictionary<TBoosterId, int> _caps;
         public event Action<TBoosterId, int> OnChanged;
 
-        //[Inject] private IBoosterKeysProvider<TBoosterId> _keysProvider;
-        private IBoosterKeysProvider<TBoosterId> _keysProvider;
-
-        // note: zenject can inject dependencies into generic classes
-        public BoosterInventory(IDataSaver dataSaver, /* Dictionary<TBoosterId, int> defaultValues,*/ Dictionary<TBoosterId, int> caps,
-            IBoosterKeysProvider<TBoosterId> keysProvider) {
-            _dataSaver = dataSaver;
+        public BoosterInventory(Dictionary<TBoosterId, int> caps) {
             _caps = caps;
-            _keysProvider = keysProvider;
         }
 
-        public void Initialize() {
-            //
-        }
+        public void Initialize() { }
 
-        public int GetCount(TBoosterId id) {
-            return _dataSaver.GetDataInt(GetBoosterSaveKey(id));
-        }
+        // --- АБСТРАКТНЫЕ МЕТОДЫ ДЛЯ СЛОЯ GAME ---
+        public abstract int GetCount(TBoosterId id);
+        protected abstract void SaveCount(TBoosterId id, int newValue);
 
-        // ... (вся остальная логика GetCap, SetCap, TryAdd, TryConsume) ...
-        // ... она остается такой же, просто 'BoosterId' заменен на 'TBoosterId' ...
-
+        // --- ЛОГИКА CORE (Осталась без изменений) ---
         public bool TryAdd(TBoosterId id, int amount, string source) {
             if (amount <= 0) return false;
             var current = GetCount(id);
@@ -45,7 +32,7 @@ namespace core.boosters {
             var delta = newValue - current;
             if (delta <= 0) return false;
 
-            Save(id, newValue);
+            SaveCount(id, newValue); // Вызываем абстрактный метод
             OnChanged?.Invoke(id, delta);
             return true;
         }
@@ -56,7 +43,7 @@ namespace core.boosters {
             if (current < amount) return false;
 
             var newValue = current - amount;
-            Save(id, newValue);
+            SaveCount(id, newValue); // Вызываем абстрактный метод
             OnChanged?.Invoke(id, -amount);
             return true;
         }
@@ -67,16 +54,6 @@ namespace core.boosters {
 
         public void SetCap(TBoosterId id, int cap) {
             _caps[id] = Mathf.Max(0, cap);
-        }
-
-        private void Save(TBoosterId id, int newValue) {
-            _dataSaver.SetData(GetBoosterSaveKey(id), newValue.ToString());
-        }
-
-        private string GetBoosterSaveKey(TBoosterId boosterId) {
-            // using the enum's name as the key
-            //return $"booster_{boosterId}";
-            return _keysProvider.GetSaveKey(boosterId);
         }
     }
 }

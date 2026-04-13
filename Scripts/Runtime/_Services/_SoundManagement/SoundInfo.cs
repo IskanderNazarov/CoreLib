@@ -1,18 +1,13 @@
 using System;
 using UnityEngine;
 
-namespace Scriptable {
-    namespace SoundManaging {
-        [Serializable]
-        public class SoundInfo {
-            public AudioClip clip;
-            [Range(0, 1)] public float volume;
-            public bool loop;
-            public float delay;
-
-            public SoundInfo() {
-                volume = 1;
-            }
-        }
+namespace Core._Services.SoundManagement {
+    [Serializable]
+    public class SoundInfo {
+        public AudioClip clip;
+        [Range(0, 1f)] public float volume = 1f;
+        [Range(-3f, 3f)] public float pitch = 1f; // Добавили питч
+        public bool loop = false;
+        public float delay = 0f;
     }
 }

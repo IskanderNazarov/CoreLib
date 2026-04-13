@@ -1,47 +1,58 @@
-﻿using System;
-using __CoreGameLib._Scripts._ScriptableObjects;
-using UnityEngine;
+﻿// Файл: Core/Ads/AdsService_GP.cs
+using System;
+using _Services._PlatformActions;
+using _Services._ScriptableObjects;
 using GamePush;
+using UnityEngine;
 using Zenject;
 
 namespace core.ads {
-    public class AdsService_GP : IAdsService, IInitializable {
+    public class AdsService_GP : IAdsService {
         private bool _isAdShowing;
-        private DateTime _startTime;
+        
+        private readonly ProjectSettings _projectSettings;
+        private readonly IPlatformActionProvider _platformProvider;
+        private PlatformAdConfig _platformConfig;
 
-        private ProjectSettings _projectSettings;
-
-        private AdsService_GP(ProjectSettings projectSettings) {
+        [Inject]
+        public AdsService_GP(ProjectSettings projectSettings, IPlatformActionProvider platformProvider) {
             _projectSettings = projectSettings;
+            _platformProvider = platformProvider;
         }
 
         public void Initialize() {
-            _startTime = DateTime.Now;
-            // gp initializes automatically via prefab
+            SupportedPlatform currentPlatform = _platformProvider.GetCurrentPlatform(); 
+            _platformConfig = _projectSettings.GetAdConfig(currentPlatform);
         }
-
-        // --- interstitial ---
 
         public event Action OnAdStart;
         public event Action OnResumeToGameAfterAd;
 
-        public void ShowInterstitial(Action onAdClosed) {
-            if (_isAdShowing) return;
+        public void ShowInterstitial(AdPlacementType placementType, Action onAdClosed) {
+            if (_isAdShowing) {
+                onAdClosed?.Invoke();
+                return;
+            }
 
-/*#if UNITY_EDITOR
-            // gp_ads editor implementation doesn't invoke callbacks, simulating here
+#if UNITY_EDITOR
             onAdClosed?.Invoke();
             return;
-#endif*/
-            var timeFromStart = DateTime.Now.Subtract(_startTime);
-            if (timeFromStart.TotalSeconds < _projectSettings.FirstInterstitialTime || !GP_Ads.IsFullscreenAvailable()) {
+#endif
+
+            // 1. Проверяем разрешено ли показывать рекламу в этот момент для этой площадки
+            if (!_platformConfig.allowedPlacements.HasFlag(placementType)) {
+                onAdClosed?.Invoke();
+                return;
+            }
+
+            // 2. Делегируем проверку таймеров самому GamePush
+            if (!GP_Ads.IsFullscreenAvailable()) {
                 onAdClosed?.Invoke();
                 return;
             }
 
             _isAdShowing = true;
 
-            // mapping to: ShowFullscreen(Action onStart, Action<bool> onClose)
             GP_Ads.ShowFullscreen(
                 onFullscreenStart: () => { PauseGame(); },
                 onFullscreenClose: (success) => {
@@ -52,13 +63,10 @@ namespace core.ads {
             );
         }
 
-        // --- rewarded ---
-
         public void ShowRewarded(Action onRewardGranted, Action onAdClosed) {
             if (_isAdShowing) return;
 
 #if UNITY_EDITOR
-            // gp_ads editor implementation doesn't invoke close callback, simulating here
             onRewardGranted?.Invoke();
             onAdClosed?.Invoke();
             return;
@@ -71,7 +79,6 @@ namespace core.ads {
 
             _isAdShowing = true;
 
-            // mapping to: ShowRewarded(string tag, Action<string> onReward, Action onStart, Action<bool> onClose)
             GP_Ads.ShowRewarded(
                 idOrTag: "REWARD",
                 onRewardedReward: (tag) => { onRewardGranted?.Invoke(); },
@@ -84,16 +91,16 @@ namespace core.ads {
             );
         }
 
-        // --- helpers ---
-
         private void PauseGame() {
             OnAdStart?.Invoke();
             Time.timeScale = 0;
+            AudioListener.pause = true; // Глушим весь звук на время рекламы
         }
 
         private void ResumeGame() {
-            OnResumeToGameAfterAd?.Invoke();
             Time.timeScale = 1;
+            AudioListener.pause = false;
+            OnResumeToGameAfterAd?.Invoke();
         }
     }
 }

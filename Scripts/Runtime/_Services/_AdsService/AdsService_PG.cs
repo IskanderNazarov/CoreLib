@@ -1,49 +1,79 @@
-// file: assets/_coregame/_scripts/ads/adservice.cs
-// assembly: corelib.asmdef
+﻿// Файл: Core/Ads/AdsService_PG.cs
 
 using System;
+using _Services._PlatformActions;
+using _Services._ScriptableObjects;
 using Playgama;
 using Playgama.Modules.Advertisement;
 using UnityEngine;
 using Zenject;
-// needed for iinitializable
 
 namespace core.ads {
-    // implementing iinitializable to subscribe to sdk events on start
-    public class AdsService_PG : IInitializable, IAdsService {
-
-        // [inject] private core.audio.AudioService _audioService;
-
+    public class AdsService_PG : IInitializable, IAdsService, IDisposable {
         private bool _isAdShowing = false;
+        private DateTime _sessionStartTime;
+        private DateTime _lastAdTime;
 
-        // stored callbacks from the game layer
         private Action _onInterstitialClosed;
         private Action _onRewardGranted;
         private Action _onRewardedAdClosed;
 
-        // internal flag to track if reward was given
-        private bool _rewardGrantedThisSession = false;
+        private readonly ProjectSettings _projectSettings;
+        private readonly IPlatformActionProvider _platformProvider;
+        private PlatformAdConfig _platformConfig;
 
-        /// <summary>
-        /// subscribes to sdk events on game start
-        /// </summary>
+        [Inject]
+        public AdsService_PG(ProjectSettings projectSettings, IPlatformActionProvider platformProvider) {
+            _projectSettings = projectSettings;
+            _platformProvider = platformProvider;
+        }
+
         public void Initialize() {
+            _sessionStartTime = DateTime.Now;
+            _lastAdTime = DateTime.MinValue; 
+
+            SupportedPlatform currentPlatform = _platformProvider.GetCurrentPlatform();
+            _platformConfig = _projectSettings.GetAdConfig(currentPlatform);
+
             Bridge.advertisement.interstitialStateChanged += OnInterstitialStateChanged;
             Bridge.advertisement.rewardedStateChanged += OnRewardedStateChanged;
         }
 
-        // --- interstitial ---
+        public void Dispose() {
+            Bridge.advertisement.interstitialStateChanged -= OnInterstitialStateChanged;
+            Bridge.advertisement.rewardedStateChanged -= OnRewardedStateChanged;
+        }
 
         public event Action OnAdStart;
         public event Action OnResumeToGameAfterAd;
 
-        /// <summary>
-        /// shows an interstitial ad.
-        /// </summary>
-        /// <param name="onAdClosed">callback when ad is closed or fails.</param>
-        public void ShowInterstitial(Action onAdClosed) {
+        public void ShowInterstitial(AdPlacementType placementType, Action onAdClosed) {
             if (_isAdShowing) {
-                onAdClosed?.Invoke(); // fail fast
+                onAdClosed?.Invoke();
+                return;
+            }
+
+#if UNITY_EDITOR
+            onAdClosed?.Invoke();
+            return;
+#endif
+
+            // 1. Проверяем разрешенные плейсменты из ProjectSettings
+            if (!_platformConfig.allowedPlacements.HasFlag(placementType)) {
+                onAdClosed?.Invoke();
+                return;
+            }
+
+            // 2. Локальная проверка таймеров (т.к. Playgama берет настройки из ProjectSettings)
+            var timeSinceStart = (float)DateTime.Now.Subtract(_sessionStartTime).TotalSeconds;
+            
+            // Защита от первого вызова: если рекламы еще не было, проверяем только timeSinceStart
+            bool isFirstAd = _lastAdTime == DateTime.MinValue;
+            var timeSinceLastAd = isFirstAd ? float.MaxValue : (float)DateTime.Now.Subtract(_lastAdTime).TotalSeconds;
+
+            if (timeSinceStart < _projectSettings.FirstInterstitialTime || 
+                timeSinceLastAd < _projectSettings.minimumDelayBetweenInterstitial) {
+                onAdClosed?.Invoke();
                 return;
             }
 
@@ -51,91 +81,82 @@ namespace core.ads {
             Bridge.advertisement.ShowInterstitial();
         }
 
-        /// <summary>
-        /// internal handler for sdk interstitial states
-        /// </summary>
         private void OnInterstitialStateChanged(InterstitialState state) {
             switch (state) {
-            case InterstitialState.Opened:
-                _isAdShowing = true;
-                PauseGame();
-                break;
-            case InterstitialState.Closed:
-            case InterstitialState.Failed:
-                if (!_isAdShowing) return; // prevent multiple calls
+                case InterstitialState.Opened:
+                    _isAdShowing = true;
+                    PauseGame();
+                    break;
+                case InterstitialState.Closed:
+                case InterstitialState.Failed:
+                    if (!_isAdShowing) return;
 
-                ResumeGame();
-                _onInterstitialClosed?.Invoke();
-
-                // clear for next ad
-                _onInterstitialClosed = null;
-                _isAdShowing = false;
-                break;
+                    // Обновляем таймер только если показ действительно состоялся или провалился после открытия
+                    _lastAdTime = DateTime.Now; 
+                    ResumeGame();
+                    
+                    var callback = _onInterstitialClosed;
+                    _onInterstitialClosed = null; // Очищаем ДО вызова, защита от двойного клика
+                    _isAdShowing = false;
+                    
+                    callback?.Invoke();
+                    break;
             }
         }
 
-        // --- rewarded ---
-
-        /// <summary>
-        /// shows a rewarded ad.
-        /// </summary>
-        /// <param name="onRewardGranted">callback if reward was granted.</param>
-        /// <param name="onAdClosed">callback when ad is closed (always, even if no reward).</param>
         public void ShowRewarded(Action onRewardGranted, Action onAdClosed) {
             if (_isAdShowing) {
-                onAdClosed?.Invoke(); // fail fast
+                onAdClosed?.Invoke();
                 return;
             }
 
-            _rewardGrantedThisSession = false; // reset flag
+#if UNITY_EDITOR
+            onRewardGranted?.Invoke();
+            onAdClosed?.Invoke();
+            return;
+#endif
+
             _onRewardGranted = onRewardGranted;
             _onRewardedAdClosed = onAdClosed;
 
             Bridge.advertisement.ShowRewarded();
         }
 
-        /// <summary>
-        /// internal handler for sdk rewarded states
-        /// </summary>
         private void OnRewardedStateChanged(RewardedState state) {
             switch (state) {
-            case RewardedState.Opened:
-                _isAdShowing = true;
-                PauseGame();
-                break;
-            case RewardedState.Rewarded:
-                // sdk confirms reward
-                _rewardGrantedThisSession = true;
-                _onRewardGranted?.Invoke(); // call reward callback now
-                break;
-            case RewardedState.Closed:
-            case RewardedState.Failed:
-                if (!_isAdShowing) return; // prevent multiple calls
+                case RewardedState.Opened:
+                    _isAdShowing = true;
+                    PauseGame();
+                    break;
+                case RewardedState.Rewarded:
+                    _onRewardGranted?.Invoke();
+                    break;
+                case RewardedState.Closed:
+                case RewardedState.Failed:
+                    if (!_isAdShowing) return;
 
-                ResumeGame();
-                _onRewardedAdClosed?.Invoke(); // always call 'closed'
-
-                // clear for next ad
-                _onRewardGranted = null;
-                _onRewardedAdClosed = null;
-                _isAdShowing = false;
-                _rewardGrantedThisSession = false;
-                break;
+                    ResumeGame();
+                    
+                    var callback = _onRewardedAdClosed;
+                    _onRewardGranted = null;
+                    _onRewardedAdClosed = null;
+                    _isAdShowing = false;
+                    
+                    callback?.Invoke();
+                    break;
             }
         }
-
-        // --- helpers (game-agnostic) ---
 
         private void PauseGame() {
             OnAdStart?.Invoke();
             Time.timeScale = 0;
-            // _audioService.MuteAll();
+            AudioListener.pause = true;
         }
 
         private void ResumeGame() {
-            OnResumeToGameAfterAd?.Invoke();
             Time.timeScale = 1;
-            // _audioService.UnmuteAll();
+            AudioListener.pause = false;
+            OnResumeToGameAfterAd?.Invoke();
         }
     }
 }
