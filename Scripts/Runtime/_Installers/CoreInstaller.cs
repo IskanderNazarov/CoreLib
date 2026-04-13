@@ -43,7 +43,7 @@ namespace __CoreGameLib._Scripts._Installers {
         private void InstallFor_GamePush() {
             Container.BindInterfacesAndSelfTo<AdsService_GP>().FromNew().AsSingle().WithArguments(_projectSettings);
             Container.BindInterfacesAndSelfTo<Purchaser_GP>().FromNew().AsSingle();
-            Container.Bind<IDataSaver>().To<DataSaver_GP>().FromNew().AsSingle().WithArguments(_projectSettings.PublicKeysFor_GP).NonLazy();
+            Container.Bind<IDataSaver>().To<DataSaver_GP>().FromNew().AsSingle()/*.WithArguments(_projectSettings.PublicKeysFor_GP)*/.NonLazy();
             Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();

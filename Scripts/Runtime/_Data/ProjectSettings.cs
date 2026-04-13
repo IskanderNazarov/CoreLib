@@ -29,7 +29,7 @@ namespace _Data {
         
         [Header("SDK Selection")]
         public SDK_Type SDKType = SDK_Type.Playgama;
-        public string[] PublicKeysFor_GP;
+        //public string[] PublicKeysFor_GP;
         
         [Header("Ads Global Settings (Playgama Only)")]
         public int FirstInterstitialTime = 60;
