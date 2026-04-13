@@ -35,7 +35,7 @@ namespace __CoreGameLib._Scripts._Services._RemoteConfig {
             GP_Variables.Fetch(OnFetchSuccess, OnFetchError);
 
             // 3. Ждем ответа или тайм-аута
-            float timeout = 5.0f; 
+            float timeout = 0.1f; 
             while (!_isFetchCompleted && timeout > 0) {
                 timeout -= Time.unscaledDeltaTime;
                 yield return null;
