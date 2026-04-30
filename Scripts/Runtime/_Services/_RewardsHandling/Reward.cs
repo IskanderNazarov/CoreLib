@@ -12,9 +12,6 @@ namespace Core._RewardPresenter {
 
     [Serializable]
     public class Reward {
-        // Стандартные валюты
-        public int Coins;
-        public int Gems;
 
         // 2. Магия Unity. Этот атрибут позволяет хранить здесь классы, 
         // которые будут написаны В ДРУГОЙ СБОРКЕ (Game), 
