@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace _Services._Localization {
     public class Localizer {
+        private readonly LocalesSettings _localesSettings;
+        private readonly IPlatformActionProvider _platformActionProvider;
         public event Action OnLanguageChanged;
 
         private readonly Dictionary<LangCode, LocaleData> _locales = new();
@@ -14,13 +16,17 @@ namespace _Services._Localization {
 
         // Делаем public для корректной работы DI-контейнера
         public Localizer(LocalesSettings localesSettings, IPlatformActionProvider platformActionProvider) {
+            _localesSettings = localesSettings;
+            _platformActionProvider = platformActionProvider;
             foreach (var loc in localesSettings.Locales) {
                 loc.Initialize();
                 _locales[loc.language] = loc;
             }
+        }
 
-            var currentLang = localesSettings.StartLang;
-            var systemLang = platformActionProvider.GetISO();
+        public void Initialize() {
+            var currentLang = _localesSettings.StartLang;
+            var systemLang = _platformActionProvider.GetISO();
 
             // Оптимизированный поиск языка без LINQ
             if (Enum.TryParse<LangCode>(systemLang, true, out var parsedLang) && _locales.ContainsKey(parsedLang)) {
