@@ -6,6 +6,7 @@ using _Data;
 using _Infrastructure;
 using _Infrastructure.Services._Leaderboards;
 using _Services._PlatformActions;
+using _Services._Purchasing;
 using _Services._Saving;
 using Core._Purchasing;
 using Core._Services;
@@ -20,27 +21,36 @@ namespace __CoreGameLib._Scripts._Installers {
         [SerializeField] private ProjectSettings _projectSettings;
 
         public override void InstallBindings() {
+#if UNITY_EDITOR
+            InstallFor_Editor();
+#else
             if (_projectSettings.SDKType == SDK_Type.Playgama) {
                 InstallFor_Playgama();
             } else if (_projectSettings.SDKType == SDK_Type.GamePush) {
                 InstallFor_GamePush();
             }
+#endif
+
 
             Container.Bind<ProjectSettings>().FromScriptableObject(_projectSettings).AsSingle();
             Container.Bind<SoundManager>().FromNew().AsSingle().NonLazy();
             Container.Bind<RewardHandler>().FromNew().AsSingle().NonLazy();
         }
 
-        private void InstallFor_Playgama() {
-#if UNITY_EDITOR
+        private void InstallFor_Editor() {
             Container.Bind<IDataSaver>().To<DataSaver_Editor>().AsSingle();
             Container.BindInterfacesAndSelfTo<AdsService_Editor>().FromNew().AsSingle();
-#else    
+            Container.BindInterfacesAndSelfTo<Purchaser_Editor>().FromNew().AsSingle();
+
+            Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
+            Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
+        }
+
+        private void InstallFor_Playgama() {
             Container.Bind<IDataSaver>().To<DataSaver_PG>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<AdsService_PG>().FromNew().AsSingle();
-            
-#endif
-            
+
             Container.BindInterfacesAndSelfTo<Purchaser_PG>().FromNew().AsSingle();
             Container.Bind<IRemoteConfig>().To<RemoteConfig_PG>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_PG>().AsSingle().NonLazy();
@@ -48,14 +58,9 @@ namespace __CoreGameLib._Scripts._Installers {
         }
 
         private void InstallFor_GamePush() {
-#if UNITY_EDITOR
-            Container.Bind<IDataSaver>().To<DataSaver_Editor>().AsSingle();
-            Container.BindInterfacesAndSelfTo<AdsService_Editor>().FromNew().AsSingle();
-#else    
-            Container.Bind<IDataSaver>().To<DataSaver_GP>().FromNew().AsSingle()/*.WithArguments(_projectSettings.PublicKeysFor_GP)*/.NonLazy();
+            Container.Bind<IDataSaver>().To<DataSaver_GP>().FromNew().AsSingle() /*.WithArguments(_projectSettings.PublicKeysFor_GP)*/.NonLazy();
             Container.BindInterfacesAndSelfTo<AdsService_GP>().FromNew().AsSingle().WithArguments(_projectSettings);
-#endif
-            
+
             Container.BindInterfacesAndSelfTo<Purchaser_GP>().FromNew().AsSingle();
             Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
