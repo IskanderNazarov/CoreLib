@@ -6,6 +6,7 @@ namespace core.ads {
         public event Action OnResumeToGameAfterAd;
         public void ShowInterstitial(AdPlacementType placementType, Action onAdClosed) {
             OnAdStart?.Invoke();
+            OnResumeToGameAfterAd?.Invoke();
         }
 
         public void ShowRewarded(Action onRewardGranted, Action onAdClosed) {
