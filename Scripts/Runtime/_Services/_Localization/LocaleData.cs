@@ -38,5 +38,5 @@ namespace _Services._Localization {
         [TextArea(1, 3)] public string value;
     }
 
-    public enum LangCode { en, ru, tr }
+    public enum LangCode { en, ru, tr, es}
 }
