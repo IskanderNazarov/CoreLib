@@ -26,7 +26,12 @@ namespace __CoreGameLib._Scripts._Services._Saving {
             GP_Player.Load();
 
             // wait until done or timeout reached
-            yield return new WaitForMaxOfSecondsOrWhile(LOAD_TIMEOUT, () => !isDone);
+            float elapsedTime = 0f;
+    while (!isDone && elapsedTime < LOAD_TIMEOUT) {
+        // Используем unscaledDeltaTime на случай, если игра в момент загрузки стоит на паузе (Time.timeScale == 0)
+        elapsedTime += Time.unscaledDeltaTime;
+        yield return null; // Ждем следующий кадр
+    }
 
             GP_Player.OnLoadComplete -= onComplete;
             GP_Player.OnLoadError -= onError;
