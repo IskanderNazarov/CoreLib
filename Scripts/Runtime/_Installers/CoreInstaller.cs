@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using __CoreGameLib._Scripts._Services._Leaderboards;
 using __CoreGameLib._Scripts._Services._Purchasing;
 using __CoreGameLib._Scripts._Services._RemoteConfig;
 using __CoreGameLib._Scripts._Services._Saving;
 using _Data;
 using _Infrastructure;
+using _Infrastructure._Analytics;
 using _Infrastructure.Services._Leaderboards;
 using _Services._PlatformActions;
 using _Services._Purchasing;
@@ -19,14 +21,19 @@ using Zenject;
 namespace __CoreGameLib._Scripts._Installers {
     public class CoreServicesInstaller : MonoInstaller {
         [SerializeField] private ProjectSettings _projectSettings;
+        private List<IAnalyticsService> _analyticsServices;
 
         public override void InstallBindings() {
+            _analyticsServices = new List<IAnalyticsService>();
 #if UNITY_EDITOR
+            _analyticsServices.Add(new ConsoleAnalyticsService());
             InstallFor_Editor();
 #else
             if (_projectSettings.SDKType == SDK_Type.Playgama) {
+                //_analyticsServices.Add(new PlaygamaAnalyticsService());
                 InstallFor_Playgama();
             } else if (_projectSettings.SDKType == SDK_Type.GamePush) {
+                _analyticsServices.Add(new GamePushAnalyticsService());
                 InstallFor_GamePush();
             }
 #endif
@@ -35,6 +42,7 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<ProjectSettings>().FromScriptableObject(_projectSettings).AsSingle();
             Container.Bind<SoundManager>().FromNew().AsSingle().NonLazy();
             Container.Bind<RewardHandler>().FromNew().AsSingle().NonLazy();
+            Container.Bind<IAnalyticsService>().To<CompositeAnalyticsService>().AsSingle().WithArguments(_analyticsServices.ToArray()).NonLazy();
         }
 
         private void InstallFor_Editor() {

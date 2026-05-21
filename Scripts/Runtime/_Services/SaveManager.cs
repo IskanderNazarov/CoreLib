@@ -28,6 +28,7 @@ namespace Core._Services {
 
             // async load from sdk
             yield return _dataSaver.Load(_saveKey, result => {
+                Debug.Log($"SaveManager__ json: {json}");
                 json = result;
                 isDone = true;
             });
