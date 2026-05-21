@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using Core._Services._Saving;
 using GamePush;
+using GamePush.Data;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,24 +15,40 @@ namespace __CoreGameLib._Scripts._Services._Saving {
         public IEnumerator Load(string key, Action<string> onLoaded) {
             var isDone = false;
 
-            UnityAction onComplete = () => { isDone = true; };
-            UnityAction onError = () => { 
-                Debug.LogWarning("// DataSaver_GP: Load error callback"); 
-                isDone = true; 
+            UnityAction onComplete = () => {
+                isDone = true;
+                
+                var fields = GP_Player.PlayerFields;
+                Debug.Log("--------------------------------------------");
+                Debug.Log("=== Fields after load ===");
+                foreach (var pf in fields) {
+                    PrintPlayerFieldData(pf);
+                }
+            };
+            UnityAction onError = () => {
+                Debug.LogWarning("// DataSaver_GP: Load error callback");
+                isDone = true;
             };
 
             GP_Player.OnLoadComplete += onComplete;
             GP_Player.OnLoadError += onError;
 
+            var fields = GP_Player.PlayerFields;
+            Debug.Log("Fields 1");
+            foreach (var pf in fields) {
+                PrintPlayerFieldData(pf);
+            }
+
+
             GP_Player.Load();
 
             // wait until done or timeout reached
             float elapsedTime = 0f;
-    while (!isDone && elapsedTime < LOAD_TIMEOUT) {
-        // Используем unscaledDeltaTime на случай, если игра в момент загрузки стоит на паузе (Time.timeScale == 0)
-        elapsedTime += Time.unscaledDeltaTime;
-        yield return null; // Ждем следующий кадр
-    }
+            while (!isDone && elapsedTime < LOAD_TIMEOUT) {
+                // Используем unscaledDeltaTime на случай, если игра в момент загрузки стоит на паузе (Time.timeScale == 0)
+                elapsedTime += Time.unscaledDeltaTime;
+                yield return null; // Ждем следующий кадр
+            }
 
             GP_Player.OnLoadComplete -= onComplete;
             GP_Player.OnLoadError -= onError;
@@ -42,6 +59,28 @@ namespace __CoreGameLib._Scripts._Services._Saving {
 
             var loadedString = GP_Player.GetString(key);
             onLoaded?.Invoke(loadedString);
+        }
+
+        private void PrintPlayerField(PlayerField pf) {
+
+            Debug.Log($"pf.key: {pf.key}");
+            Debug.Log($"pf.name: {pf.name}");
+            Debug.Log($"pf.@default: {pf.@default}");
+            Debug.Log($"Variants");
+            foreach (var pfVariant in pf.variants) {
+                Debug.Log($"pfVariant.name: {pfVariant.name} -->> pfVariant.key: {pfVariant.value}");
+            }
+        }
+
+        private void PrintPlayerFieldData(PlayerFieldData pf) {
+
+            Debug.Log($"pfd.key: {pf.key}");
+            Debug.Log($"pfd.name: {pf.name}");
+            Debug.Log($"Variants");
+            foreach (var pfVariant in pf.variants) {
+                Debug.Log($"pfdVariant.name: {pfVariant.name} -->> pfdVariant.key: {pfVariant.value}");
+            }
+            Debug.Log("-----------");
         }
 
         public void Save(string key, string json) {
