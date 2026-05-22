@@ -4,7 +4,6 @@ using __CoreGameLib._Scripts._Services._RemoteConfig;
 using _Services._Saving;
 using Playgama;
 using UnityEngine;
-using Zenject;
 
 namespace _Infrastructure {
     public class RemoteConfig_PG : IRemoteConfig {
@@ -13,7 +12,7 @@ namespace _Infrastructure {
         private DataParserTool _dataParserTool;
 
 
-        public IEnumerator LoadConfigs(IKeysStorage  keysStorage) {
+        public IEnumerator LoadConfigs(IKeysStorage  keysStorage, bool loadPlatformVariables =  false) {
             _keysStorage = keysStorage;
             Debug.Log($"111 _keysStorage == null: {_keysStorage == null}");
             _dataParserTool = new DataParserTool(_keysStorage.GetDefaultValues(), _keysStorage);
