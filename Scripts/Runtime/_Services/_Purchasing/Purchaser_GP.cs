@@ -2,26 +2,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using GamePush;
 using Core._Purchasing;
+using GamePush;
+using UnityEngine;
 
 namespace __CoreGameLib._Scripts._Services._Purchasing {
     public class Purchaser_GP : IPurchaser {
-        
+
         public event Action<string, bool> OnPurchaseCompletedEvent;
-        
+
         private List<ProductInfo> _productsInfo = new List<ProductInfo>();
-        
+
         // internal flags for initialization
         private bool _productsFetched;
         private bool _purchasesFetched;
         private bool _isPurchaseInProgress;
-        
+
         // temporary storage for restoration logic
         private List<string> _ownedProductTags = new List<string>();
+        private bool _isSupported;
+        public bool IsAvailable => GP_Payments.IsPaymentsAvailable() && _isSupported;
 
         public IEnumerator Initialize(bool isSupported) {
+            isSupported = IsAvailable;
             if (!isSupported) yield break;
 
             _productsFetched = false;
@@ -39,7 +42,7 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
 
             // wait until both callbacks are finished
             yield return new WaitUntil(() => _productsFetched && _purchasesFetched);
-            
+
             // process restoration after we have both lists
             ProcessRestoration();
         }
@@ -78,11 +81,11 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
                     id = gpProd.tag, // using tag as id
                     priceValue = gpProd.price.ToString(),
                     // formatting price: "100 YAN"
-                    price = $"{gpProd.price} {gpProd.currencySymbol}" 
+                    price = $"{gpProd.price} {gpProd.currencySymbol}"
                 };
                 _productsInfo.Add(info);
             }
-            
+
             _productsFetched = true;
         }
 
@@ -99,7 +102,7 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
         private void OnFetchError() {
             // mark as fetched to prevent infinite loading loop
             _productsFetched = true;
-            _purchasesFetched = true; 
+            _purchasesFetched = true;
             Debug.LogWarning("gp fetch products error");
         }
 
@@ -114,7 +117,7 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
                 }
             }
         }
-        
+
         public void ConsumePurchase(string id) {
             GP_Payments.Consume(id);
         }

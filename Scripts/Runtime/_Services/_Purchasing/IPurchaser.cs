@@ -11,6 +11,7 @@ using UnityEngine;
 namespace Core._Purchasing {
     public interface IPurchaser {
         public event Action<string, bool> OnPurchaseCompletedEvent;
+        public bool IsAvailable { get; }
 
         IEnumerator Initialize(bool isSupported);
         void BuyItem(string id);

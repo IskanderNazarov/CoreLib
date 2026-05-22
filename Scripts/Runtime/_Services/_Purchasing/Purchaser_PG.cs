@@ -19,6 +19,8 @@ namespace Core._Purchasing {
         // reports (string productID, bool isRestoringPurchase)
         public event Action<string, bool> OnPurchaseCompletedEvent;
 
+        public bool IsAvailable => Bridge.payments.isSupported;
+        
         public IEnumerator Initialize(bool isSupported) {
             _isSupported = isSupported;
 
