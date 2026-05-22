@@ -17,13 +17,6 @@ namespace __CoreGameLib._Scripts._Services._Saving {
 
             UnityAction onComplete = () => {
                 isDone = true;
-                
-                var fields = GP_Player.PlayerFields;
-                Debug.Log("--------------------------------------------");
-                Debug.Log("=== Fields after load ===");
-                foreach (var pf in fields) {
-                    PrintPlayerFieldData(pf);
-                }
             };
             UnityAction onError = () => {
                 Debug.LogWarning("// DataSaver_GP: Load error callback");
@@ -32,12 +25,6 @@ namespace __CoreGameLib._Scripts._Services._Saving {
 
             GP_Player.OnLoadComplete += onComplete;
             GP_Player.OnLoadError += onError;
-
-            var fields = GP_Player.PlayerFields;
-            Debug.Log("Fields 1");
-            foreach (var pf in fields) {
-                PrintPlayerFieldData(pf);
-            }
 
 
             GP_Player.Load();

@@ -28,8 +28,8 @@ namespace Core._Services {
 
             // async load from sdk
             yield return _dataSaver.Load(_saveKey, result => {
-                Debug.Log($"SaveManager__ _saveKey: {_saveKey}, json: {json}");
                 json = result;
+                //Debug.Log($"SaveManager__ _saveKey: {_saveKey}, json: {json}");
                 isDone = true;
             });
 
@@ -37,12 +37,19 @@ namespace Core._Services {
 
             if (!string.IsNullOrEmpty(json)) {
                 try {
+                    json = PreProcessJson(json);
                     Data = JsonUtility.FromJson<T>(json);
                 } catch (Exception e) {
                     Debug.LogError($"// error parsing save: {e.Message}");
                     Data = new T();
                 }
             }
+        }
+        
+        // --- ДОБАВЛЕНО: Виртуальный метод, который ничего не делает по умолчанию, 
+        // но позволяет наследникам менять JSON ---
+        protected virtual string PreProcessJson(string json) {
+            return json;
         }
 
         public void MarkDirty() => _isDirty = true;
