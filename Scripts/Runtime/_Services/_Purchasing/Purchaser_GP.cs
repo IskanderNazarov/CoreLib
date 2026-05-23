@@ -24,7 +24,7 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
         public bool IsAvailable => GP_Payments.IsPaymentsAvailable() && _isSupported;
 
         public IEnumerator Initialize(bool isSupported) {
-            isSupported = IsAvailable;
+            _isSupported = isSupported;
             if (!isSupported) yield break;
 
             _productsFetched = false;
