@@ -1,6 +1,4 @@
-﻿// Файл: Core/Services/ScriptableObjects/ProjectSettings.cs
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using core.ads;
 using UnityEngine;
@@ -24,7 +22,7 @@ namespace _Data {
         public AdPlacementType allowedPlacements = AdPlacementType.All;
     }
 
-    [CreateAssetMenu(fileName = "ProjectSettings", menuName = "ScriptableObjects/ProjectSettings", order = 10)]
+    [CreateAssetMenu(fileName = "ProjectSettings", menuName = "Data/ProjectSettings", order = 10)]
     public class ProjectSettings : ScriptableObject {
         
         [Header("SDK Selection")]

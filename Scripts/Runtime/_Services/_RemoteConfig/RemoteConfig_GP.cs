@@ -1,14 +1,15 @@
 ﻿// Файл: RemoteConfig_GP.cs
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using _Services._Saving;
 using GamePush;
-using _Infrastructure; // Для RCKeysStorage
-using _Services._Saving; // Для IKeysStorage
+using UnityEngine;
+// Для RCKeysStorage
+// Для IKeysStorage
 
 namespace __CoreGameLib._Scripts._Services._RemoteConfig {
     public class RemoteConfig_GP : IRemoteConfig {
-        
+
         private Dictionary<string, string> _configCache;
         private bool _isFetchCompleted;
         private IKeysStorage _keysStorage;
@@ -16,14 +17,14 @@ namespace __CoreGameLib._Scripts._Services._RemoteConfig {
         public IEnumerator LoadConfigs(IKeysStorage keysStorage, bool loadPlatformVariables = false) {
             _keysStorage = keysStorage;
             InitializeDefaults();
-            
+
             _isFetchCompleted = false;
 
             // 1. Если мы хотим загрузить переменные с платформы И платформа это поддерживает
             if (loadPlatformVariables && GP_Variables.IsPlatformVariablesAvailable()) {
                 Debug.Log("RemoteConfig_GP: Запрашиваем переменные с ПЛАТФОРМЫ (Яндекс/VK и т.д.)...");
                 GP_Variables.FetchPlatformVariables(OnPlatformFetchSuccess, OnPlatformFetchError);
-            } 
+            }
             // 2. Иначе используем переменные из самого GamePush
             else {
                 Debug.Log("RemoteConfig_GP: Запрашиваем переменные из GamePush (Платформенные пропущены или не поддерживаются).");
@@ -34,6 +35,9 @@ namespace __CoreGameLib._Scripts._Services._RemoteConfig {
 
             // 3. Ждем ответа (с защитой от вечного зависания)
             float timeout = 5.0f; // 5 секунд на ожидание
+#if UNITY_EDITOR
+            timeout = 0.1f;
+  #endif
             while (!_isFetchCompleted && timeout > 0) {
                 timeout -= Time.unscaledDeltaTime;
                 yield return null;
