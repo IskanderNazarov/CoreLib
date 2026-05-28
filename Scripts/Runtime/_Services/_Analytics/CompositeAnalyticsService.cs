@@ -19,6 +19,9 @@ namespace _Infrastructure._Analytics {
         public void LogEvent(string eventName, string value) {
             foreach (var service in _services) service.LogEvent(eventName, value);
         }
+        public void LogEvent(string eventName, int value) {
+            foreach (var service in _services) service.LogEvent(eventName, value);
+        }
 
         public void LogEvent(string eventName, Dictionary<string, object> parameters) {
             foreach (var service in _services) service.LogEvent(eventName, parameters);

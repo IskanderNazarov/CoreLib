@@ -34,7 +34,7 @@ namespace __CoreGameLib._Scripts._Services._RemoteConfig {
             }
 
             // 3. Ждем ответа (с защитой от вечного зависания)
-            float timeout = 5.0f; // 5 секунд на ожидание
+            float timeout = 2.0f; // 5 секунд на ожидание
 #if UNITY_EDITOR
             timeout = 0.1f;
   #endif

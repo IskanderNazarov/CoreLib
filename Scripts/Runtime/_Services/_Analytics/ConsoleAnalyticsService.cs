@@ -14,7 +14,10 @@ namespace _Infrastructure._Analytics {
         }
 
         public void LogEvent(string eventName, string value) {
-            Debug.Log($"{_prefix} Event: {eventName} | Value: {value}");
+            Debug.Log($"{_prefix} string Event: {eventName} | Value: {value}");
+        }
+        public void LogEvent(string eventName, int value) {
+            Debug.Log($"{_prefix} int Event: {eventName} | Value: {value}");
         }
 
         public void LogEvent(string eventName, Dictionary<string, object> parameters) {

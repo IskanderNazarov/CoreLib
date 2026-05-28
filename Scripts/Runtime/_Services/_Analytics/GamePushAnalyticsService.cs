@@ -15,6 +15,9 @@ namespace _Infrastructure._Analytics {
         public void LogEvent(string eventName, string value) {
             GP_Analytics.Goal(eventName, value);
         }
+        public void LogEvent(string eventName, int value) {
+            GP_Analytics.Goal(eventName, value);
+        }
 
         public void LogEvent(string eventName, Dictionary<string, object> parameters) {
             // Так как GamePush Goal принимает только одно значение, 

@@ -15,6 +15,7 @@ namespace _Infrastructure._Analytics {
         /// Отправляет событие с одним строковым значением (согласно API GamePush Goal).
         /// </summary>
         void LogEvent(string eventName, string value);
+        void LogEvent(string eventName, int value);
 
         /// <summary>
         /// Отправляет событие с набором параметров (для более сложных систем аналитики).
