@@ -9,7 +9,7 @@ using UnityEngine;
 using Zenject;
 
 namespace core.ads {
-    public class AdsService_PG : IInitializable, IAdsService, IDisposable {
+    public class AdsService_PG : IAdsService, IDisposable {
         private bool _isAdShowing = false;
         private DateTime _sessionStartTime;
         private DateTime _lastAdTime;

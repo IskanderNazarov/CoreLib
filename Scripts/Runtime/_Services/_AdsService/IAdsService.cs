@@ -14,6 +14,7 @@ namespace core.ads {
         event Action OnResumeToGameAfterAd;
         
         // Добавлен placementType
+        void Initialize();
         void ShowInterstitial(AdPlacementType placementType, Action onAdClosed);
         void ShowRewarded(Action onRewardGranted, Action onAdClosed);
     }

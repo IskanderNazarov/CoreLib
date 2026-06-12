@@ -4,6 +4,10 @@ namespace core.ads {
     public class AdsService_Editor:IAdsService {
         public event Action OnAdStart;
         public event Action OnResumeToGameAfterAd;
+        
+        public void Initialize() {
+        }
+        
         public void ShowInterstitial(AdPlacementType placementType, Action onAdClosed) {
             OnAdStart?.Invoke();
             OnResumeToGameAfterAd?.Invoke();
