@@ -15,6 +15,7 @@ using Core._Services;
 using Core._Services._Saving;
 using core.ads;
 using core.purchasing;
+using core.rating;
 using UnityEngine;
 using Zenject;
 
@@ -63,6 +64,7 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<IRemoteConfig>().To<RemoteConfig_PG>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_PG>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_PG>().AsSingle().NonLazy();
+            Container.Bind<IRatingService>().To<RatingService_PG>().AsSingle().NonLazy();
         }
 
         private void InstallFor_GamePush() {
@@ -73,6 +75,7 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
+            Container.Bind<IRatingService>().To<RatingService_GP>().AsSingle().NonLazy();
         }
     }
 }
