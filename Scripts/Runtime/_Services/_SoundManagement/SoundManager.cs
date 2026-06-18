@@ -1,10 +1,11 @@
 using System;
 using Core._Services.SoundManagement;
 using Hellmade.Sound;
+using UnityEngine;
 using Zenject;
 
 namespace Core._Services {
-    public class SoundManager {
+public class SoundManager {
         public Action<bool> OnMusicStateChanged;
         public Action<bool> OnSoundStateChanged;
 
@@ -18,6 +19,7 @@ namespace Core._Services {
 
         public void MuteSounds(bool mute) {
             EazySoundManager.GlobalVolume = mute ? 0 : 1.0f;
+            AudioListener.pause = mute;
         }
 
         // Обновленный метод. Принимает overridePitch для безопасного изменения питча ракет

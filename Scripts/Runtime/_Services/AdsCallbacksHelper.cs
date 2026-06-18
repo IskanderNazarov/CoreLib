@@ -1,3 +1,4 @@
+using System.Collections;
 using core.ads;
 using UnityEngine;
 using Zenject;
@@ -12,7 +13,13 @@ namespace Core._Services {
             _adsService.OnAdStart += OnAdStart;
             _adsService.OnResumeToGameAfterAd -= OnResumeToGameAfterAd;
             _adsService.OnResumeToGameAfterAd += OnResumeToGameAfterAd;
-            //_adsService.OnGameShouldPause += OnGameShouldPause;
+        }
+
+        private void OnDestroy() {
+            if (_adsService != null) {
+                _adsService.OnAdStart -= OnAdStart;
+                _adsService.OnResumeToGameAfterAd -= OnResumeToGameAfterAd;
+            }
         }
 
         private void OnAdStart() {
@@ -21,6 +28,11 @@ namespace Core._Services {
 
         private void OnResumeToGameAfterAd() {
             OnGameShouldPause(false);
+            
+            // Force refresh music state to ensure bg music restarts if it was stopped by the ad or browser
+            if (_soundManager.IsMusicOn) {
+                _soundManager.SetMusicOn(true);
+            }
         }
 
         private void OnGameShouldPause(bool pause) {
