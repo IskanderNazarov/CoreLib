@@ -54,6 +54,7 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
+            Container.Bind<IRatingService>().To<RatingService_Editor>().AsSingle().NonLazy();
         }
 
         private void InstallFor_Playgama() {
