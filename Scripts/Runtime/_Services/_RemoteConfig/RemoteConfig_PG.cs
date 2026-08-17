@@ -7,48 +7,46 @@ using UnityEngine;
 
 namespace _Infrastructure {
     public class RemoteConfig_PG : IRemoteConfig {
-        private bool _isLoaded = true;
+        private bool _isLoaded;
         private IKeysStorage _keysStorage;
         private DataParserTool _dataParserTool;
 
-
-        public IEnumerator LoadConfigs(IKeysStorage  keysStorage, bool loadPlatformVariables =  false) {
+        public IEnumerator LoadConfigs(IKeysStorage keysStorage, bool loadPlatformVariables = false) {
             _keysStorage = keysStorage;
-            Debug.Log($"111 _keysStorage == null: {_keysStorage == null}");
-            _dataParserTool = new DataParserTool(_keysStorage.GetDefaultValues(), _keysStorage);
-            Debug.Log($"222 _keysStorage == null: {_keysStorage == null}");
             
-            if (Bridge.remoteConfig.isSupported) {
-                //if(Bridge.platform.id == "yandex")
-                Debug.Log("RC_ LoadConfigs 1");
-                _isLoaded = false;
+            // 1. Сразу инициализируем парсер дефолтными значениями.
+            // Согласно документации: "always provide hardcoded defaults" до старта.
+            var defValues = _keysStorage.GetDefaultValues();
+            _dataParserTool = new DataParserTool(defValues, _keysStorage);
 
-                var defValues = _keysStorage.GetDefaultValues();
-                Debug.Log($"defValues == null: {defValues == null}");
-                foreach (var kv in defValues) {
-                    Debug.Log($"k: {kv.Key}, v: {kv.Value}");
-                }
-
-                var clientFeatures = new object[] { _keysStorage.GetDefaultValues() };
-
-                var options = new Dictionary<string, object>(); //code from Playgama docs
-                //options.Add("clientFeatures", clientFeatures);
-                /*var optionsJSON = JsonUtility.ToJson(options);
-                Debug.Log($"optionsJSON: {optionsJSON}");*/
-
-                /*clientFeatures = new object[] {
-                    _keysStorage.GetDefaultValues()
-                };*/
-
-                options.Add("clientFeatures", clientFeatures);
-
-                Bridge.remoteConfig.Get(options, OnLoadComplete);
-                //Debug.Log("RC_ LoadConfigs 2");
-                yield return new WaitUntil(() => _isLoaded);
-                //Debug.Log("RC_ LoadConfigs 3");
+            // 2. Проверяем поддержку на текущей площадке
+            if (!Bridge.remoteConfig.isSupported) {
+                Debug.Log("[RemoteConfig_PG] Remote Config не поддерживается на данной площадке. Используем локальные дефолты.");
+                yield break;
             }
-            else {
+
+            _isLoaded = false;
+
+            // 3. Устанавливаем контекст для сегментации (как в твоем старом коде)
+            // В v2 параметры накапливаются и отправляются при вызове Get()
+            var clientFeatures = new object[] { defValues };
+            var context = new Dictionary<string, object> {
+                { "clientFeatures", clientFeatures }
+            };
+            Bridge.remoteConfig.SetContext(context);
+
+            // 4. Запрашиваем конфиг. В v2 метод Get() вызывается без параметров.
+            Bridge.remoteConfig.Get(OnLoadComplete);
+
+            // 5. Ждем ответа с защитой от вечного зависания (Таймаут 5 секунд)
+            float timeout = 5.0f;
+            while (!_isLoaded && timeout > 0) {
+                timeout -= Time.unscaledDeltaTime;
                 yield return null;
+            }
+
+            if (timeout <= 0) {
+                Debug.LogWarning("[RemoteConfig_PG] Превышено время ожидания загрузки конфигов. Используем дефолтные значения.");
             }
         }
 
@@ -56,24 +54,31 @@ namespace _Infrastructure {
             return _dataParserTool.GetDataString(key);
         }
 
+        // В v2 возвращается строго Dictionary<string, string>
         private void OnLoadComplete(bool success, Dictionary<string, string> map) {
-            Debug.Log("RC__ success = " + success);
             _isLoaded = true;
-            if (!success) return;
+
+            if (!success || map == null) {
+                Debug.LogWarning("[RemoteConfig_PG] Ошибка загрузки Remote Config или конфиг пуст.");
+                return;
+            }
+
+            Debug.Log($"[RemoteConfig_PG] Успешная загрузка. Получено ключей: {map.Count}");
 
             var defMap = _keysStorage.GetDefaultValues();
-            var data = new Dictionary<string, object>();
+            var mergedData = new Dictionary<string, object>();
+
+            // Мержим полученные данные поверх дефолтных
             foreach (var kv in defMap) {
-                Debug.Log($"RC LoadCompleted__ key: {kv.Key},  value: {kv.Value}");
                 if (map.ContainsKey(kv.Key)) {
-                    data[kv.Key] = map[kv.Key];
-                }
-                else {
-                    data[kv.Key] = defMap[kv.Key];
+                    mergedData[kv.Key] = map[kv.Key];
+                } else {
+                    mergedData[kv.Key] = kv.Value;
                 }
             }
 
-            _dataParserTool = new DataParserTool(data, _keysStorage);
+            // Пересобираем парсер с уже объединенными (актуальными) данными
+            _dataParserTool = new DataParserTool(mergedData, _keysStorage);
         }
     }
 }

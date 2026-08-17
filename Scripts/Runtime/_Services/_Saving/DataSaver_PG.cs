@@ -1,46 +1,61 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core._Services._Saving;
 using Playgama;
-using Playgama.Modules.Storage;
 using UnityEngine;
 
 namespace _Services._Saving {
     public class DataSaver_PG : IDataSaver {
-        
+
         public IEnumerator Load(string key, Action<string> onLoaded) {
             bool isDone = false;
             string loadedString = null;
 
-            // Запрашиваем 1 ключ (например, "main_save")
-            Bridge.storage.Get(key, (success, value) => {
-                if (success && !string.IsNullOrEmpty(value)) {
-                    loadedString = value; // Получили наш JSON
+            // В Bridge SDK v2 передаем ключ в виде списка
+            var keys = new List<string> {
+                key
+            };
+
+            Bridge.storage.Get(keys, (success, data) => {
+                // Если успех и список данных не пуст, берем первый элемент (индекс 0)
+                if (success && data != null && data.Count > 0 && !string.IsNullOrEmpty(data[0])) {
+                    loadedString = data[0];
                 }
                 isDone = true;
-            }, GetStorageType());
+            });
 
             yield return new WaitUntil(() => isDone);
             onLoaded?.Invoke(loadedString);
         }
 
         public void Save(string key, string json) {
-            // Просто отдаем строку платформе
-            Bridge.storage.Set(key, json, (success) => {
-                if (!success) Debug.LogWarning($"[DataSaver_PG] Failed to save {key}");
-            }, GetStorageType());
+            // Упаковываем ключ и данные в списки
+            var keys = new List<string> {
+                key
+            };
+            var data = new List<object> {
+                json
+            }; // JSON (строка) передается как object
+
+            Bridge.storage.Set(keys, data, (success) => {
+                if (!success) {
+                    Debug.LogWarning($"[DataSaver_PG] Не удалось сохранить данные по ключу: {key}");
+                }
+            });
         }
 
         public void Delete(string key) {
-            Bridge.storage.Delete(key, null, GetStorageType());
-        }
+            // Упаковываем ключ в список
+            var keys = new List<string> {
+                key
+            };
 
-        private StorageType GetStorageType() {
-#if UNITY_EDITOR
-            return StorageType.LocalStorage;
-#else
-            return Bridge.player.isAuthorized ? StorageType.PlatformInternal : StorageType.LocalStorage;
-#endif
+            Bridge.storage.Delete(keys, (success) => {
+                if (!success) {
+                    Debug.LogWarning($"[DataSaver_PG] Не удалось удалить данные по ключу: {key}");
+                }
+            });
         }
     }
 }
