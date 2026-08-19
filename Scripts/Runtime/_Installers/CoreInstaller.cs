@@ -13,6 +13,7 @@ using _Services._Saving;
 using Core._Purchasing;
 using Core._Services;
 using Core._Services._Saving;
+using core.achievements;
 using core.ads;
 using core.purchasing;
 using core.rating;
@@ -55,6 +56,8 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
             Container.Bind<IRatingService>().To<RatingService_Editor>().AsSingle().NonLazy();
+
+            Container.Bind<IAchievementsService>().To<AchievementsService_Editor>().AsSingle().NonLazy();
         }
 
         private void InstallFor_Playgama() {
@@ -66,6 +69,8 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.BindInterfacesAndSelfTo<LeaderboardService_PG>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_PG>().AsSingle().NonLazy();
             Container.Bind<IRatingService>().To<RatingService_PG>().AsSingle().NonLazy();
+
+            Container.Bind<IAchievementsService>().To<AchievementsService_PG>().AsSingle().NonLazy();
         }
 
         private void InstallFor_GamePush() {
@@ -77,6 +82,8 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
             Container.Bind<IRatingService>().To<RatingService_GP>().AsSingle().NonLazy();
+
+            Container.Bind<IAchievementsService>().To<AchievementsService_GP>().AsSingle().NonLazy();
         }
     }
 }
