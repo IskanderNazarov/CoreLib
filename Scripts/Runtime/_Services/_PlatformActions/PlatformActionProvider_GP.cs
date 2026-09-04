@@ -12,6 +12,14 @@ namespace __CoreGameLib._Scripts {
             GP_Game.GameReady();
         }
 
+        public void CallGameplayStart() {
+            GP_Game.GameplayStart();
+        }
+
+        public void CallGameplayEnd() {
+            GP_Game.GameplayStop();
+        }
+
         public void SetMinimalDelayForInterstitial() {
             //controlled from GP dashboard
         }

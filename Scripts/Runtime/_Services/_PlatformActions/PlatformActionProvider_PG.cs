@@ -29,6 +29,14 @@ namespace _Infrastructure {
         }
 
         public void CallGameReadyAPI() {
+            
+        }
+
+        public void CallGameplayStart() {
+            throw new NotImplementedException();
+        }
+
+        public void CallGameplayEnd() {
             throw new NotImplementedException();
         }
 

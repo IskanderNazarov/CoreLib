@@ -7,6 +7,8 @@ namespace _Services._PlatformActions {
         SupportedPlatform GetCurrentPlatform();
         string GetISO();
         void CallGameReadyAPI();
+        void CallGameplayStart();
+        void CallGameplayEnd();
         void SetMinimalDelayForInterstitial();
         bool IsRemoteConfigSupported();
     }
