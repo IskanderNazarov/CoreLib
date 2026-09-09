@@ -1,13 +1,20 @@
 // Файл: Core/Services/Lang/PlatformActionProvider_PG.cs
 
-using System;
 using _Data;
 using _Services._PlatformActions;
 using Playgama;
 using Playgama.Modules.Platform;
+using Zenject;
 
 namespace _Infrastructure {
     public class PlatformActionProvider_PG : IPlatformActionProvider {
+
+        [Inject]
+        private PlatformActionProvider_PG(ProjectSettings settings) {
+            PlatformConfig = settings.GetAdConfig(GetCurrentPlatform());
+        }
+        
+        public PlatformConfig PlatformConfig { get; }
         
         public SupportedPlatform GetCurrentPlatform() {
             // Playgama возвращает string. Переводим его в наш SupportedPlatform.
@@ -53,5 +60,6 @@ namespace _Infrastructure {
         public bool IsRemoteConfigSupported() {
             return Bridge.remoteConfig.isSupported;
         }
+
     }
 }

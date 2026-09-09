@@ -11,6 +11,7 @@ namespace _Services._PlatformActions {
         void CallGameplayEnd();
         void SetMinimalDelayForInterstitial();
         bool IsRemoteConfigSupported();
-        
+        PlatformConfig PlatformConfig { get; }
+
     }
 }
