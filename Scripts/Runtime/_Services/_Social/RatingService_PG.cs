@@ -18,13 +18,8 @@ namespace core.rating {
                 return;
             }
 
-            // У Playgama Rate() - это void метод или Promise, в Unity обертке обычно используются события
-            // или коллбэки. Если стандартный вызов не принимает Action, оборачиваем его.
             try {
-                Bridge.social.Rate();
-                // Playgama не всегда возвращает результат закрытия окна, 
-                // поэтому просто сообщаем, что запрос был отправлен успешно.
-                onComplete?.Invoke(true);
+                Bridge.social.Rate(onComplete);
             } catch (Exception e) {
                 Debug.LogError($"[RatingService_PG] Failed to show rate dialog: {e.Message}");
                 onComplete?.Invoke(false);

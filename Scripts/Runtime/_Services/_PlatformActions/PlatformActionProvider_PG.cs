@@ -1,9 +1,10 @@
-﻿// Файл: Core/Services/Lang/PlatformActionProvider_PG.cs
+// Файл: Core/Services/Lang/PlatformActionProvider_PG.cs
 
 using System;
 using _Data;
 using _Services._PlatformActions;
 using Playgama;
+using Playgama.Modules.Platform;
 
 namespace _Infrastructure {
     public class PlatformActionProvider_PG : IPlatformActionProvider {
@@ -25,27 +26,31 @@ namespace _Infrastructure {
         }
 
         public string GetISO() {
-            throw new NotImplementedException();
+            return Bridge.platform.language;
         }
 
         public void CallGameReadyAPI() {
-            
+            Bridge.platform.SendMessage(PlatformMessage.GameReady);
         }
 
         public void CallGameplayStart() {
-            throw new NotImplementedException();
+#pragma warning disable 0612, 0618
+            Bridge.platform.SendMessage(PlatformMessage.GameplayStarted);
+#pragma warning restore 0612, 0618
         }
 
         public void CallGameplayEnd() {
-            throw new NotImplementedException();
+#pragma warning disable 0612, 0618
+            Bridge.platform.SendMessage(PlatformMessage.GameplayStopped);
+#pragma warning restore 0612, 0618
         }
 
         public void SetMinimalDelayForInterstitial() {
-            throw new NotImplementedException();
+            // Delay is controlled via ProjectSettings or platform dashboard
         }
 
         public bool IsRemoteConfigSupported() {
-            throw new NotImplementedException();
+            return Bridge.remoteConfig.isSupported;
         }
     }
 }

@@ -74,7 +74,7 @@ namespace _Infrastructure.Services._Leaderboards {
                 return;
             }
 
-            if (Bridge.leaderboards.type != LeaderboardType.Native) {
+            if (Bridge.leaderboards.type != LeaderboardType.Native && Bridge.leaderboards.type != LeaderboardType.NativePopup) {
                 //Debug.LogWarning("[LeaderboardService] Native leaderboard popups are not supported on this platform.");
                 onComplete?.Invoke(false);
                 return;
