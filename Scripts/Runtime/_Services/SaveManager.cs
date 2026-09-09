@@ -7,7 +7,7 @@ using UnityEngine;
 using Zenject;
 
 namespace Core._Services {
-    public class SaveManager<T> : ITickable, IDisposable where T : new() {
+    public class SaveManager<T> : ITickable, IDisposable, IAsyncInitializable where T : new() {
         protected readonly IDataSaver _dataSaver;
         protected readonly string _saveKey;
         
