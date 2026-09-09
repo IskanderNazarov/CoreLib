@@ -1,7 +1,8 @@
-﻿// File: Assets/Core/Scripts/SaveManager.cs
+// File: Assets/Core/Scripts/SaveManager.cs
 using System;
 using System.Collections;
 using Core._Services._Saving;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -22,18 +23,11 @@ namespace Core._Services {
             Data = new T();
         }
 
-        public virtual IEnumerator Initialize() {
-            var isDone = false;
+        public virtual async UniTask Initialize() {
             var json = string.Empty;
 
             // async load from sdk
-            yield return _dataSaver.Load(_saveKey, result => {
-                json = result;
-                //Debug.Log($"SaveManager__ _saveKey: {_saveKey}, json: {json}");
-                isDone = true;
-            });
-
-            yield return new WaitUntil(() => isDone);
+            json = await _dataSaver.Load(_saveKey);
 
             if (!string.IsNullOrEmpty(json)) {
                 try {

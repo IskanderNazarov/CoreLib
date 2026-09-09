@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using Core._Services._Saving;
 using Playgama;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace _Services._Saving {
     public class DataSaver_PG : IDataSaver {
 
-        public IEnumerator Load(string key, Action<string> onLoaded) {
+        public async UniTask<string> Load(string key) {
             bool isDone = false;
             string loadedString = null;
 
@@ -25,8 +26,8 @@ namespace _Services._Saving {
                 isDone = true;
             });
 
-            yield return new WaitUntil(() => isDone);
-            onLoaded?.Invoke(loadedString);
+            await UniTask.WaitUntil(() => isDone);
+            return loadedString;
         }
 
         public void Save(string key, string json) {

@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Core._Purchasing;
 using GamePush;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace __CoreGameLib._Scripts._Services._Purchasing {
@@ -23,9 +24,9 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
         private bool _isSupported;
         public bool IsAvailable => GP_Payments.IsPaymentsAvailable() && _isSupported;
 
-        public IEnumerator Initialize(bool isSupported) {
+        public async UniTask Initialize(bool isSupported) {
             _isSupported = isSupported;
-            if (!isSupported) yield break;
+            if (!isSupported) return;
 
             _productsFetched = false;
             _purchasesFetched = false;
@@ -41,7 +42,7 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
             );
 
             // wait until both callbacks are finished
-            yield return new WaitUntil(() => _productsFetched && _purchasesFetched);
+            await UniTask.WaitUntil(() => _productsFetched && _purchasesFetched);
 
             // process restoration after we have both lists
             ProcessRestoration();

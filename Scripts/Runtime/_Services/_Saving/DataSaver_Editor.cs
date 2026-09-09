@@ -1,8 +1,9 @@
-﻿// File: Assets/Core/Scripts/Editor/DataSaver_Editor.cs
+// File: Assets/Core/Scripts/Editor/DataSaver_Editor.cs
 using System;
 using System.Collections;
 using System.IO;
 using Core._Services._Saving;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Services._Saving {
@@ -17,7 +18,7 @@ namespace _Services._Saving {
             }
         }
 
-        public IEnumerator Load(string key, Action<string> onLoaded) {
+        public async UniTask<string> Load(string key) {
             var path = GetSavePath(key);
             var json = string.Empty;
 
@@ -25,8 +26,8 @@ namespace _Services._Saving {
                 json = File.ReadAllText(path);
             }
 
-            yield return null; // simulate async
-            onLoaded?.Invoke(json);
+            await UniTask.Yield(); // simulate async
+            return json;
         }
 
         public void Save(string key, string json) {

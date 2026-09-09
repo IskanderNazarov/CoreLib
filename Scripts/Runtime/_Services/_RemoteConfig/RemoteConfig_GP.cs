@@ -1,7 +1,8 @@
-﻿// Файл: RemoteConfig_GP.cs
+// Файл: RemoteConfig_GP.cs
 using System.Collections;
 using System.Collections.Generic;
 using _Services._Saving;
+using Cysharp.Threading.Tasks;
 using GamePush;
 using UnityEngine;
 // Для RCKeysStorage
@@ -14,7 +15,7 @@ namespace __CoreGameLib._Scripts._Services._RemoteConfig {
         private bool _isFetchCompleted;
         private IKeysStorage _keysStorage;
 
-        public IEnumerator LoadConfigs(IKeysStorage keysStorage, bool loadPlatformVariables = false) {
+        public async UniTask LoadConfigs(IKeysStorage keysStorage, bool loadPlatformVariables = false) {
             _keysStorage = keysStorage;
             InitializeDefaults();
 
@@ -37,10 +38,10 @@ namespace __CoreGameLib._Scripts._Services._RemoteConfig {
             float timeout = 2.0f; // 5 секунд на ожидание
 #if UNITY_EDITOR
             timeout = 0.1f;
-  #endif
+#endif
             while (!_isFetchCompleted && timeout > 0) {
                 timeout -= Time.unscaledDeltaTime;
-                yield return null;
+                await UniTask.Yield();
             }
 
             if (timeout <= 0) {

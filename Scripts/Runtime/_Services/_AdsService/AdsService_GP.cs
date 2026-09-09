@@ -1,4 +1,4 @@
-﻿// Файл: Core/Ads/AdsService_GP.cs
+// Файл: Core/Ads/AdsService_GP.cs
 using System;
 using _Data;
 using _Services._PlatformActions;

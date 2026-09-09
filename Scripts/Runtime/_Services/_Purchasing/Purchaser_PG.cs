@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Playgama;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace Core._Purchasing {
 
         public bool IsAvailable => Bridge.payments.isSupported;
         
-        public IEnumerator Initialize(bool isSupported) {
+        public async UniTask Initialize(bool isSupported) {
             _isSupported = isSupported;
 
             Debug.Log($"purchaser start init");
@@ -29,10 +30,10 @@ namespace Core._Purchasing {
             if (isSupported) {
                 productsInfo = new List<ProductInfo>();
                 Bridge.payments.GetCatalog(OnCatalogLoaded);
-                yield return new WaitUntil(() => _isInitialized);
+                await UniTask.WaitUntil(() => _isInitialized);
 
                 Bridge.payments.GetPurchases(OnGetPurchaseComplete);
-                yield return new WaitUntil(() => _isGetPurchaseCompleted);
+                await UniTask.WaitUntil(() => _isGetPurchaseCompleted);
             } else {
                 _isInitialized = true;
             }

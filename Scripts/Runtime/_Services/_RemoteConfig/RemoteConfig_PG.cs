@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using __CoreGameLib._Scripts._Services._RemoteConfig;
 using _Services._Saving;
+using Cysharp.Threading.Tasks;
 using Playgama;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace _Infrastructure {
         private IKeysStorage _keysStorage;
         private DataParserTool _dataParserTool;
 
-        public IEnumerator LoadConfigs(IKeysStorage keysStorage, bool loadPlatformVariables = false) {
+        public async UniTask LoadConfigs(IKeysStorage keysStorage, bool loadPlatformVariables = false) {
             _keysStorage = keysStorage;
             
             // 1. Сразу инициализируем парсер дефолтными значениями.
@@ -22,7 +23,7 @@ namespace _Infrastructure {
             // 2. Проверяем поддержку на текущей площадке
             if (!Bridge.remoteConfig.isSupported) {
                 Debug.Log("[RemoteConfig_PG] Remote Config не поддерживается на данной площадке. Используем локальные дефолты.");
-                yield break;
+                return;
             }
 
             _isLoaded = false;
@@ -42,7 +43,7 @@ namespace _Infrastructure {
             float timeout = 5.0f;
             while (!_isLoaded && timeout > 0) {
                 timeout -= Time.unscaledDeltaTime;
-                yield return null;
+                await UniTask.Yield();
             }
 
             if (timeout <= 0) {

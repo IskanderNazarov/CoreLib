@@ -17,6 +17,7 @@ using core.achievements;
 using core.ads;
 using core.purchasing;
 using core.rating;
+using DefaultNamespace;
 using UnityEngine;
 using Zenject;
 
@@ -26,6 +27,7 @@ namespace __CoreGameLib._Scripts._Installers {
         private List<IAnalyticsService> _analyticsServices;
 
         public override void InstallBindings() {
+            
             _analyticsServices = new List<IAnalyticsService>();
 #if UNITY_EDITOR
             _analyticsServices.Add(new ConsoleAnalyticsService());
@@ -41,6 +43,7 @@ namespace __CoreGameLib._Scripts._Installers {
 #endif
 
 
+            Container.Bind<NazCore>().FromNew().AsSingle().NonLazy();
             Container.Bind<ProjectSettings>().FromScriptableObject(_projectSettings).AsSingle();
             Container.Bind<SoundManager>().FromNew().AsSingle().NonLazy();
             Container.Bind<RewardHandler>().FromNew().AsSingle().NonLazy();

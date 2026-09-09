@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections;
 using Core._Purchasing;
+using Cysharp.Threading.Tasks;
 
 namespace _Services._Purchasing {
     public class Purchaser_Editor : IPurchaser {
@@ -9,9 +10,9 @@ namespace _Services._Purchasing {
         public bool IsAvailable => _isSupported;
 
         private bool _isSupported;
-        public IEnumerator Initialize(bool isSupported) {
+        public UniTask Initialize(bool isSupported) {
             _isSupported = isSupported;
-            yield return null;
+            return UniTask.CompletedTask;
         }
 
         public void BuyItem(string id) {

@@ -1,4 +1,4 @@
-﻿// Файл: Core/Ads/AdsService_PG.cs
+// Файл: Core/Ads/AdsService_PG.cs
 
 using System;
 using _Data;
