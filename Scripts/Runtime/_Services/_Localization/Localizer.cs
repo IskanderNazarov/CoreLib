@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Data;
 using _Services._PlatformActions;
 using UnityEngine;
 
@@ -15,10 +16,10 @@ namespace _Services._Localization {
         public LangCode CurrentLanguage { get; private set; }
 
         // Делаем public для корректной работы DI-контейнера
-        public Localizer(LocalesSettings localesSettings, IPlatformActionProvider platformActionProvider) {
-            _localesSettings = localesSettings;
+        public Localizer(ProjectSettings projectSettings, IPlatformActionProvider platformActionProvider) {
+            _localesSettings = projectSettings.LocalesSettings;
             _platformActionProvider = platformActionProvider;
-            foreach (var loc in localesSettings.Locales) {
+            foreach (var loc in _localesSettings.Locales) {
                 loc.Initialize();
                 _locales[loc.language] = loc;
             }

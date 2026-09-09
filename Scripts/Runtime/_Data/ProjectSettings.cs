@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Services._Localization;
 using core.ads;
 using GamePush;
 using UnityEngine;
@@ -41,6 +42,8 @@ namespace _Data {
         [FormerlySerializedAs("defaultAdConfig")] [Header("Ads Placements Config")]
         public PlatformConfig defaultConfig; // Если платформа не найдена
         public List<PlatformConfig> platformAdConfigs = new List<PlatformConfig>();
+        
+        public LocalesSettings LocalesSettings;
 
         // Метод для быстрого получения конфига
         public PlatformConfig GetAdConfig(SupportedPlatform currentPlatform) {

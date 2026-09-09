@@ -7,6 +7,7 @@ using _Data;
 using _Infrastructure;
 using _Infrastructure._Analytics;
 using _Infrastructure.Services._Leaderboards;
+using _Services._Localization;
 using _Services._PlatformActions;
 using _Services._Purchasing;
 using _Services._Saving;
@@ -44,6 +45,7 @@ namespace __CoreGameLib._Scripts._Installers {
 
 
             Container.Bind<NazCore>().FromNew().AsSingle().NonLazy();
+            Container.Bind<Localizer>().FromNew().AsSingle().NonLazy();
             Container.Bind<ProjectSettings>().FromScriptableObject(_projectSettings).AsSingle();
             Container.Bind<SoundManager>().FromNew().AsSingle().NonLazy();
             Container.Bind<RewardHandler>().FromNew().AsSingle().NonLazy();
