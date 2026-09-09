@@ -20,6 +20,7 @@ namespace _Data {
     public class PlatformAdConfig {
         public SupportedPlatform platform;
         public AdPlacementType allowedPlacements = AdPlacementType.All;
+        public string leaderboardID;
     }
 
     [CreateAssetMenu(fileName = "ProjectSettings", menuName = "Data/ProjectSettings", order = 10)]
@@ -42,6 +43,9 @@ namespace _Data {
             var config = platformAdConfigs.Find(c => c.platform == currentPlatform);
             return config ?? defaultAdConfig;
         }
+        
+        public string leaderboardID;
+        
     }
     
     public enum SDK_Type {
