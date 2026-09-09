@@ -21,6 +21,7 @@ namespace _Infrastructure {
                 "poki" => SupportedPlatform.Poki,
                 "game_distribution" => SupportedPlatform.GameDistribution,
                 "gamepix" => SupportedPlatform.GamePix,
+                "playgama" => SupportedPlatform.Playgama,
                 _ => SupportedPlatform.Unknown
             };
         }

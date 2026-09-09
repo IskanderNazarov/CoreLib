@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using core.ads;
+using GamePush;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Data {
     
@@ -13,11 +15,13 @@ namespace _Data {
         CrazyGames,
         Poki,
         GameDistribution,
-        GamePix
+        GamePix,
+        Playgama,
+        GameMonetize
     }
 
     [Serializable]
-    public class PlatformAdConfig {
+    public class PlatformConfig {
         public SupportedPlatform platform;
         public AdPlacementType allowedPlacements = AdPlacementType.All;
         public string leaderboardID;
@@ -34,17 +38,16 @@ namespace _Data {
         public int FirstInterstitialTime = 60;
         public int minimumDelayBetweenInterstitial = 60;
 
-        [Header("Ads Placements Config")]
-        public PlatformAdConfig defaultAdConfig; // Если платформа не найдена
-        public List<PlatformAdConfig> platformAdConfigs = new List<PlatformAdConfig>();
+        [FormerlySerializedAs("defaultAdConfig")] [Header("Ads Placements Config")]
+        public PlatformConfig defaultConfig; // Если платформа не найдена
+        public List<PlatformConfig> platformAdConfigs = new List<PlatformConfig>();
 
         // Метод для быстрого получения конфига
-        public PlatformAdConfig GetAdConfig(SupportedPlatform currentPlatform) {
+        public PlatformConfig GetAdConfig(SupportedPlatform currentPlatform) {
             var config = platformAdConfigs.Find(c => c.platform == currentPlatform);
-            return config ?? defaultAdConfig;
+            return config ?? defaultConfig;
         }
         
-        public string leaderboardID;
         
     }
     

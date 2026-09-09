@@ -37,6 +37,7 @@ namespace __CoreGameLib._Scripts {
                 Platform.POKI => SupportedPlatform.Poki,
                 Platform.GAME_DISTRIBUTION => SupportedPlatform.GameDistribution,
                 Platform.GAMEPIX => SupportedPlatform.GamePix,
+                Platform.CUSTOM => SupportedPlatform.Playgama,
                 _ => SupportedPlatform.Unknown
             };
         }

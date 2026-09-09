@@ -20,7 +20,7 @@ namespace core.ads {
 
         private readonly ProjectSettings _projectSettings;
         private readonly IPlatformActionProvider _platformProvider;
-        private PlatformAdConfig _platformConfig;
+        private PlatformConfig _platformConfig;
 
         [Inject]
         public AdsService_PG(ProjectSettings projectSettings, IPlatformActionProvider platformProvider) {
