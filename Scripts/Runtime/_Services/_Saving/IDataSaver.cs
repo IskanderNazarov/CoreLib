@@ -1,9 +1,8 @@
 // CoreLib.asmdef (Слой Core)
-using System;
-using System.Collections;
+
 using Cysharp.Threading.Tasks;
 
-namespace Core._Services._Saving {
+namespace _Services._Saving {
     public interface IDataSaver {
         // Загружает строку (JSON) по одному главному ключу
         UniTask<string> Load(string key);
