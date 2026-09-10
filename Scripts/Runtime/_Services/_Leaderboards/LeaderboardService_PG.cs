@@ -1,14 +1,12 @@
 #if PLAYGAMA
 using System;
 using System.Collections.Generic;
-using __CoreGameLib._Scripts._Services._Leaderboards;
-using _Services._Leaderboards;
 using Playgama;
 using Playgama.Modules.Leaderboards;
 using UnityEngine;
 using Zenject;
 
-namespace _Infrastructure.Services._Leaderboards {
+namespace _Services._Leaderboards {
     public class LeaderboardService_PG : ILeaderboardService, IInitializable {
         //private const string LeaderboardName = "leaders";
 

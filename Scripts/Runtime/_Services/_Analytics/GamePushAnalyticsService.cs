@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GamePush;
 
-namespace _Infrastructure._Analytics {
+namespace _Services._Analytics {
     /// <summary>
     /// Реализация аналитики для GamePush.
     /// Использует метод Goal согласно документации.

@@ -1,12 +1,12 @@
 // Файл: Assets/_CoreGame/_Scripts/Boosters/BoosterInventory.cs
 // Сборка: CoreLib.asmdef
+
 using System;
 using System.Collections.Generic;
-using _Services._BoosterInventory;
 using UnityEngine;
 using Zenject;
 
-namespace core.boosters {
+namespace _Services._BoosterInventory {
     
     public abstract class BoosterInventory<TBoosterId> : IBoosterInventory<TBoosterId>, IInitializable
         where TBoosterId : Enum {

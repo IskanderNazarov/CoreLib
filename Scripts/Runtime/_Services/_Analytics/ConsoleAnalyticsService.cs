@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace _Infrastructure._Analytics {
+namespace _Services._Analytics {
     /// <summary>
     /// Логирует события в консоль Unity. Полезно для разработки.
     /// </summary>

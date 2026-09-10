@@ -1,10 +1,9 @@
 #if PLAYGAMA
 // Файл: Core/Services/Achievements/AchievementsService_PG.cs
-using _Services._Achievements;
 using Playgama;
 using UnityEngine;
 
-namespace core.achievements {
+namespace _Services._Achievements {
     public class AchievementsService_PG : IAchievementsService {
 
         public bool IsSupported => true; //Bridge.achievements.isSupported;

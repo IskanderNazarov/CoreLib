@@ -1,15 +1,14 @@
 ﻿#if GAMEPUSH
-﻿using System;
+using System;
 using System.Collections.Generic;
-using _Infrastructure.Services._Leaderboards;
-using _Services._Leaderboards;
 using GamePush;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
+
 // Важно для UnityAction
 
-namespace __CoreGameLib._Scripts._Services._Leaderboards {
+namespace _Services._Leaderboards {
     public class LeaderboardService_GP : ILeaderboardService, IInitializable {
         // Тэг лидерборда. 
         // Если вы используете основное поле "score" в GamePush, можно оставить пустым "" 

@@ -1,10 +1,8 @@
 #if GAMEPUSH
 // Файл: Core/Services/Achievements/AchievementsService_GP.cs
-using _Services._Achievements;
 using GamePush;
-using UnityEngine;
 
-namespace core.achievements {
+namespace _Services._Achievements {
     public class AchievementsService_GP : IAchievementsService {
         
         // GamePush практически всегда поддерживает достижения через свой оверлей

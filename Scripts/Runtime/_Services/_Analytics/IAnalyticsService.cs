@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace _Infrastructure._Analytics {
+namespace _Services._Analytics {
     /// <summary>
     /// Абстракция для отправки аналитических событий.
     /// Позволяет легко менять провайдера (GamePush, Unity Analytics, AppMetrica и т.д.)

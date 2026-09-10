@@ -7,7 +7,9 @@ using _Services._Purchasing;
 using _Services._RemoteConfig;
 using _Services._Saving;
 using Cysharp.Threading.Tasks;
+#if GAMEPUSH
 using GamePush;
+#endif
 using Zenject;
 
 public class NazCore {

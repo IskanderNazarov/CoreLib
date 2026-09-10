@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using __CoreGameLib._Scripts._Services._Leaderboards;
 using _Data;
 using _Infrastructure;
-using _Infrastructure._Analytics;
-using _Infrastructure.Services._Leaderboards;
 using _Services._Achievements;
 using _Services._AdsService;
+using _Services._Analytics;
+using _Services._Leaderboards;
 using _Services._Localization;
 using _Services._PlatformActions;
 using _Services._Purchasing;
@@ -14,7 +13,6 @@ using _Services._RewardsHandling;
 using _Services._Saving;
 using _Services._Social;
 using _Services._SoundManagement;
-using core.achievements;
 using UnityEngine;
 using Zenject;
 

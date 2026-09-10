@@ -1,8 +1,6 @@
-﻿using _Services._Achievements;
-
-namespace core.achievements {
+﻿namespace _Services._Achievements {
     public class AchievementsService_Editor: IAchievementsService {
-        public bool IsSupported { get; }
+        public bool IsSupported => false;
         public void Unlock(string achievementId) {
         }
 

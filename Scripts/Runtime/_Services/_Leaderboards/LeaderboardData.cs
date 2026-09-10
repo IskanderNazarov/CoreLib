@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace _Infrastructure.Services._Leaderboards {
+namespace _Services._Leaderboards {
 // a container for leaderboard data retrieved from the service.
     public class LeaderboardData {
         public List<LeaderboardEntry> Entries { get; set; } = new List<LeaderboardEntry>();

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace _Infrastructure._Analytics {
+namespace _Services._Analytics {
     /// <summary>
     /// Позволяет отправлять события сразу нескольким сервисам.
     /// Например: в GamePush и в Консоль одновременно.

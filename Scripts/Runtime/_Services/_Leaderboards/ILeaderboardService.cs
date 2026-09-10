@@ -1,5 +1,4 @@
 using System;
-using _Infrastructure.Services._Leaderboards;
 
 namespace _Services._Leaderboards {
     public interface ILeaderboardService {
