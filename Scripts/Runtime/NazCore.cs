@@ -7,7 +7,9 @@ using Core._Purchasing;
 using Core._Services;
 using Core._Services._Saving;
 using core.ads;
+#if GAMEPUSH
 using GamePush;
+#endif
 using UnityEngine;
 using Zenject;
 using Cysharp.Threading.Tasks;
@@ -101,9 +103,12 @@ namespace DefaultNamespace {
         }
         
         private async UniTask InitSDK() {
+#if GAMEPUSH
             if (_projectSettings.SDKType == SDK_Type.GamePush) {
                 await UniTask.WaitUntil(() => GP_Init.isReady);
             }
+#endif
+            await UniTask.Yield(); // Just to avoid async warnings if empty
         }
     }
 }

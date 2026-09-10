@@ -20,6 +20,12 @@
     ],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.playgama.bridge",
+            "expression": "",
+            "define": "PLAYGAMA"
+        }
+    ],
     "noEngineReferences": false
 }

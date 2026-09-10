@@ -1,3 +1,4 @@
+#if PLAYGAMA
 // Файл: Core/Services/Lang/PlatformActionProvider_PG.cs
 
 using _Data;
@@ -63,3 +64,4 @@ namespace _Infrastructure {
 
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if PLAYGAMA
 // file: assets/_coregame/_scripts/purchasing/purchaser.cs
 // assembly: corelib.asmdef
 
@@ -130,3 +131,4 @@ namespace Core._Purchasing {
         }
     }
 }
+#endif

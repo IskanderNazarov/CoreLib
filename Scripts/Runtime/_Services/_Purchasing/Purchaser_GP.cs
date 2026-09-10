@@ -1,3 +1,4 @@
+#if GAMEPUSH
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -124,3 +125,5 @@ namespace __CoreGameLib._Scripts._Services._Purchasing {
         }
     }
 }
+
+#endif

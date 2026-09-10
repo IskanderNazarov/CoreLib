@@ -1,3 +1,4 @@
+#if GAMEPUSH
 using System.Collections.Generic;
 using System.Linq;
 using GamePush;
@@ -31,3 +32,4 @@ namespace _Infrastructure._Analytics {
         }
     }
 }
+#endif

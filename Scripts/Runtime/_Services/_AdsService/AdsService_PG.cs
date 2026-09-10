@@ -1,3 +1,4 @@
+#if PLAYGAMA
 // Файл: Core/Ads/AdsService_PG.cs
 
 using System;
@@ -160,3 +161,4 @@ namespace core.ads {
         }
     }
 }
+#endif

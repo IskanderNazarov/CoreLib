@@ -1,3 +1,4 @@
+#if PLAYGAMA
 // Файл: Core/Services/Achievements/AchievementsService_PG.cs
 using Playgama;
 using UnityEngine;
@@ -51,3 +52,4 @@ namespace core.achievements {
         }
     }
 }
+#endif

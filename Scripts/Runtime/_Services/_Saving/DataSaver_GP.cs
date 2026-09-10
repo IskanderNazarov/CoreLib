@@ -1,3 +1,4 @@
+#if GAMEPUSH
 // File: Scripts/Runtime/_Services/_Saving/DataSaver_GP.cs
 
 using System;
@@ -80,3 +81,5 @@ namespace __CoreGameLib._Scripts._Services._Saving {
         }
     }
 }
+
+#endif

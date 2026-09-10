@@ -1,3 +1,4 @@
+#if GAMEPUSH
 // Файл: Core/Services/Achievements/AchievementsService_GP.cs
 using GamePush;
 using UnityEngine;
@@ -34,3 +35,5 @@ namespace core.achievements {
         }
     }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if GAMEPUSH
 // Файл: Core/Services/Rating/RatingService_GP.cs
 using System;
 using GamePush;
@@ -40,3 +41,5 @@ namespace core.rating {
         }
     }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if GAMEPUSH
 ﻿using _Data;
 using _Services._PlatformActions;
 using GamePush;
@@ -50,3 +51,4 @@ namespace __CoreGameLib._Scripts {
         }
     }
 }
+#endif

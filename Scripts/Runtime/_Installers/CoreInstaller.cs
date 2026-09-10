@@ -34,13 +34,18 @@ namespace __CoreGameLib._Scripts._Installers {
             _analyticsServices.Add(new ConsoleAnalyticsService());
             InstallFor_Editor();
 #else
+#if PLAYGAMA
             if (_projectSettings.SDKType == SDK_Type.Playgama) {
                 //_analyticsServices.Add(new PlaygamaAnalyticsService());
                 InstallFor_Playgama();
-            } else if (_projectSettings.SDKType == SDK_Type.GamePush) {
+            }
+#endif
+#if GAMEPUSH
+            if (_projectSettings.SDKType == SDK_Type.GamePush) {
                 _analyticsServices.Add(new GamePushAnalyticsService());
                 InstallFor_GamePush();
             }
+#endif
 #endif
 
 
@@ -57,14 +62,21 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.BindInterfacesAndSelfTo<AdsService_Editor>().FromNew().AsSingle();
             Container.BindInterfacesAndSelfTo<Purchaser_Editor>().FromNew().AsSingle();
 
+#if GAMEPUSH
             Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
             Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
+#elif PLAYGAMA
+            Container.Bind<IRemoteConfig>().To<RemoteConfig_PG>().FromNew().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LeaderboardService_PG>().AsSingle().NonLazy();
+            Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_PG>().AsSingle().NonLazy();
+#endif
             Container.Bind<IRatingService>().To<RatingService_Editor>().AsSingle().NonLazy();
 
             Container.Bind<IAchievementsService>().To<AchievementsService_Editor>().AsSingle().NonLazy();
         }
 
+#if PLAYGAMA
         private void InstallFor_Playgama() {
             Container.Bind<IDataSaver>().To<DataSaver_PG>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<AdsService_PG>().FromNew().AsSingle();
@@ -77,7 +89,9 @@ namespace __CoreGameLib._Scripts._Installers {
 
             Container.Bind<IAchievementsService>().To<AchievementsService_PG>().AsSingle().NonLazy();
         }
+#endif
 
+#if GAMEPUSH
         private void InstallFor_GamePush() {
             Container.Bind<IDataSaver>().To<DataSaver_GP>().FromNew().AsSingle() /*.WithArguments(_projectSettings.PublicKeysFor_GP)*/.NonLazy();
             Container.BindInterfacesAndSelfTo<AdsService_GP>().FromNew().AsSingle().WithArguments(_projectSettings);
@@ -90,5 +104,6 @@ namespace __CoreGameLib._Scripts._Installers {
 
             Container.Bind<IAchievementsService>().To<AchievementsService_GP>().AsSingle().NonLazy();
         }
+#endif
     }
 }

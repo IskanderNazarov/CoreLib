@@ -6,7 +6,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+#if PLAYGAMA
 using Playgama;
+#endif
 using UnityEngine;
 
 namespace Core._Purchasing {

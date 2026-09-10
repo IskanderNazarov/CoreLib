@@ -1,3 +1,4 @@
+#if PLAYGAMA
 using System;
 using System.Collections.Generic;
 using __CoreGameLib._Scripts._Services._Leaderboards;
@@ -131,3 +132,4 @@ namespace _Infrastructure.Services._Leaderboards {
         }
     }
 }
+#endif

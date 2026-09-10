@@ -1,3 +1,4 @@
+#if GAMEPUSH
 // Файл: RemoteConfig_GP.cs
 using System.Collections;
 using System.Collections.Generic;
@@ -98,3 +99,5 @@ namespace __CoreGameLib._Scripts._Services._RemoteConfig {
         }
     }
 }
+
+#endif

@@ -1,3 +1,4 @@
+#if GAMEPUSH
 // Файл: Core/Ads/AdsService_GP.cs
 using System;
 using _Data;
@@ -104,3 +105,4 @@ namespace core.ads {
         }
     }
 }
+#endif

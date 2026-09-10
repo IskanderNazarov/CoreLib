@@ -1,3 +1,4 @@
+#if PLAYGAMA
 // Файл: Core/Services/Rating/RatingService_PG.cs
 using System;
 using Playgama;
@@ -27,3 +28,5 @@ namespace core.rating {
         }
     }
 }
+
+#endif

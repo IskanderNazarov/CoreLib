@@ -1,3 +1,4 @@
+#if GAMEPUSH
 ﻿using System;
 using System.Collections.Generic;
 using _Infrastructure.Services._Leaderboards;
@@ -239,3 +240,4 @@ namespace __CoreGameLib._Scripts._Services._Leaderboards {
         }
     }
 }
+#endif

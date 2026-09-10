@@ -1,3 +1,4 @@
+#if PLAYGAMA
 using System.Collections;
 using System.Collections.Generic;
 using __CoreGameLib._Scripts._Services._RemoteConfig;
@@ -83,3 +84,4 @@ namespace _Infrastructure {
         }
     }
 }
+#endif
