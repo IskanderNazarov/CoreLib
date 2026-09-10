@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core._Services.SoundManagement {
+namespace _Services._SoundManagement {
     [Serializable]
     public class SoundInfo {
         public AudioClip clip;

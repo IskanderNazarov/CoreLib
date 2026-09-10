@@ -1,12 +1,11 @@
 // File: Assets/Core/Scripts/SaveManager.cs
+
 using System;
-using System.Collections;
-using _Services._Saving;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
-namespace Core._Services {
+namespace _Services._Saving {
     public class SaveManager<T> : ITickable, IDisposable, IAsyncInitializable where T : new() {
         protected readonly IDataSaver _dataSaver;
         protected readonly string _saveKey;

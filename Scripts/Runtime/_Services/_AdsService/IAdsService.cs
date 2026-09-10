@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace core.ads {
+namespace _Services._AdsService {
     [Flags]
     public enum AdPlacementType {
         None = 0,

@@ -1,6 +1,6 @@
 using System;
 
-namespace core.boosters {
+namespace _Services._BoosterInventory {
     // 'tboosterid' can be any enum. 'where' is the constraint.
     public interface IBoosterInventory<TBoosterId> where TBoosterId : Enum {
         event Action<TBoosterId, int> OnChanged; // boosterid, delta

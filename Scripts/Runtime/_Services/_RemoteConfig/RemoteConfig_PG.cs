@@ -1,13 +1,10 @@
 #if PLAYGAMA
-using System.Collections;
 using System.Collections.Generic;
-using __CoreGameLib._Scripts._Services._RemoteConfig;
-using _Services._Saving;
 using Cysharp.Threading.Tasks;
 using Playgama;
 using UnityEngine;
 
-namespace _Infrastructure {
+namespace _Services._RemoteConfig {
     public class RemoteConfig_PG : IRemoteConfig {
         private bool _isLoaded;
         private IKeysStorage _keysStorage;

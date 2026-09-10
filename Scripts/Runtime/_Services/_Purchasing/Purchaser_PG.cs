@@ -3,14 +3,13 @@
 // assembly: corelib.asmdef
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Playgama;
 using UnityEngine;
 
-namespace Core._Purchasing {
+namespace _Services._Purchasing {
     public class Purchaser_PG : IPurchaser {
         private bool _isPurchaseAvailable;
         private bool _isInitialized;

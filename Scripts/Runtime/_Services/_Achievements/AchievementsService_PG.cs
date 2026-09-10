@@ -1,5 +1,6 @@
 #if PLAYGAMA
 // Файл: Core/Services/Achievements/AchievementsService_PG.cs
+using _Services._Achievements;
 using Playgama;
 using UnityEngine;
 

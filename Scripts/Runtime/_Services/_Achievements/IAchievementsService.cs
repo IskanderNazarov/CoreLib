@@ -1,5 +1,5 @@
 // Файл: Core/Services/Achievements/IAchievementsService.cs
-namespace core.achievements {
+namespace _Services._Achievements {
     public interface IAchievementsService {
         /// <summary>
         /// Поддерживает ли текущая площадка функционал достижений.

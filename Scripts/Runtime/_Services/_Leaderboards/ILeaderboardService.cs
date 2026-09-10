@@ -1,7 +1,7 @@
 using System;
 using _Infrastructure.Services._Leaderboards;
 
-namespace __CoreGameLib._Scripts._Services._Leaderboards {
+namespace _Services._Leaderboards {
     public interface ILeaderboardService {
         bool IsInitialized { get; }
         bool IsPlayerAuthorized { get; } // NEW: to check authorization status

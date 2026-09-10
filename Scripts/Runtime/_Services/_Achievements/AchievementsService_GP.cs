@@ -1,5 +1,6 @@
 #if GAMEPUSH
 // Файл: Core/Services/Achievements/AchievementsService_GP.cs
+using _Services._Achievements;
 using GamePush;
 using UnityEngine;
 

@@ -4,7 +4,7 @@ using System;
 using GamePush;
 using UnityEngine;
 
-namespace core.rating {
+namespace _Services._Social {
     public class RatingService_GP : IRatingService {
 
         public bool IsReviewSupported() {

@@ -4,7 +4,7 @@ using System;
 using Playgama;
 using UnityEngine;
 
-namespace core.rating {
+namespace _Services._Social {
     public class RatingService_PG : IRatingService {
         
         public bool IsReviewSupported() {

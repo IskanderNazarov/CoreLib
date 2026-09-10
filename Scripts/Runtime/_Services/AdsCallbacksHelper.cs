@@ -1,9 +1,9 @@
-using System.Collections;
-using core.ads;
+using _Services._AdsService;
+using _Services._SoundManagement;
 using UnityEngine;
 using Zenject;
 
-namespace Core._Services {
+namespace _Services {
     public class AdsCallbacksHelper : MonoBehaviour {
         [Inject] private IAdsService _adsService;
         [Inject] private SoundManager _soundManager;

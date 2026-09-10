@@ -3,13 +3,10 @@
 
 using System;
 using System.Threading.Tasks;
-using Core._RewardPresenter;
-using core.rewards;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using Zenject;
 
-namespace core.purchasing {
+namespace _Services._RewardsHandling {
     public class RewardHandler {
         private IRewardApplier _rewardApplier;
         private IRewardPresenter _rewardPresenter;

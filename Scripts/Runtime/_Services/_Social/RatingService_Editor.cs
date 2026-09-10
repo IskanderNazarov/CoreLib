@@ -1,6 +1,6 @@
 using System;
 
-namespace core.rating {
+namespace _Services._Social {
     public class RatingService_Editor : IRatingService {
 
         public bool IsReviewSupported() {

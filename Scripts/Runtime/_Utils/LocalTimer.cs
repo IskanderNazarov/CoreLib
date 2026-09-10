@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Scripts._UI {
+namespace _Utils {
     public class LocalTimer : MonoBehaviour {
         public int Time => (int) _timer;
         

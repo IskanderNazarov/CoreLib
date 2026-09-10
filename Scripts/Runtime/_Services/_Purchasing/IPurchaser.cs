@@ -2,16 +2,11 @@
 // assembly: corelib.asmdef
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 #if PLAYGAMA
-using Playgama;
 #endif
-using UnityEngine;
 
-namespace Core._Purchasing {
+namespace _Services._Purchasing {
     public interface IPurchaser {
         public event Action<string, bool> OnPurchaseCompletedEvent;
         public bool IsAvailable { get; }

@@ -3,9 +3,11 @@
 
 using System;
 using System.Collections.Generic;
-using UnityEngine; // Нужен для [SerializeReference]
+using UnityEngine;
 
-namespace Core._RewardPresenter {
+// Нужен для [SerializeReference]
+
+namespace _Services._RewardsHandling {
     
     // 1. Маркерный интерфейс. Core не знает, что в нем будет.
     public interface IRewardItem { }

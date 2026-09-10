@@ -1,11 +1,10 @@
 using System;
-using Core._Services.SoundManagement;
 using Hellmade.Sound;
 using UnityEngine;
 using Zenject;
 
-namespace Core._Services {
-public class SoundManager {
+namespace _Services._SoundManagement {
+    public class SoundManager {
         public Action<bool> OnMusicStateChanged;
         public Action<bool> OnSoundStateChanged;
 

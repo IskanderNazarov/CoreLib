@@ -1,7 +1,8 @@
 // Файл: Core/Services/Rating/IRatingService.cs
+
 using System;
 
-namespace core.rating {
+namespace _Services._Social {
     public interface IRatingService {
         /// <summary>
         /// Проверяет, можно ли прямо сейчас вызвать нативное окно оценки.

@@ -1,4 +1,4 @@
-namespace Core._Purchasing {
+namespace _Services._Purchasing {
     public class ProductInfo {
         //public string commonId;
         public string id;

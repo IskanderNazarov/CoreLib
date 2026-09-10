@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 
-namespace Core._Services {
+namespace _Services {
     public interface IAsyncInitializable {
         UniTask Initialize();
     }

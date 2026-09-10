@@ -9,7 +9,7 @@ using Playgama.Modules.Advertisement;
 using UnityEngine;
 using Zenject;
 
-namespace core.ads {
+namespace _Services._AdsService {
     public class AdsService_PG : IAdsService, IDisposable {
         private bool _isAdShowing = false;
         private DateTime _sessionStartTime;

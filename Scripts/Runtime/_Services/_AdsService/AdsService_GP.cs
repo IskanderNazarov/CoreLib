@@ -7,7 +7,7 @@ using GamePush;
 using UnityEngine;
 using Zenject;
 
-namespace core.ads {
+namespace _Services._AdsService {
     public class AdsService_GP : IAdsService {
         private bool _isAdShowing;
         

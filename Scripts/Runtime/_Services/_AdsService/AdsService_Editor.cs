@@ -1,8 +1,6 @@
 using System;
 
-using Zenject;
-
-namespace core.ads {
+namespace _Services._AdsService {
     public class AdsService_Editor : IAdsService {
         public event Action OnAdStart;
         public event Action OnResumeToGameAfterAd;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using _Services._AdsService;
 using _Services._Localization;
-using core.ads;
 #if GAMEPUSH
 using GamePush;
 #endif

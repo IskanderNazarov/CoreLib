@@ -1,14 +1,12 @@
 #if GAMEPUSH
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core._Purchasing;
-using GamePush;
 using Cysharp.Threading.Tasks;
+using GamePush;
 using UnityEngine;
 
-namespace __CoreGameLib._Scripts._Services._Purchasing {
+namespace _Services._Purchasing {
     public class Purchaser_GP : IPurchaser {
 
         public event Action<string, bool> OnPurchaseCompletedEvent;

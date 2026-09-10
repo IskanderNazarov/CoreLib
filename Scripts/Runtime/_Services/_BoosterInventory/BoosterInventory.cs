@@ -2,6 +2,7 @@
 // Сборка: CoreLib.asmdef
 using System;
 using System.Collections.Generic;
+using _Services._BoosterInventory;
 using UnityEngine;
 using Zenject;
 

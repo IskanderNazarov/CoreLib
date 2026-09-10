@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using _Services._Saving;
 using UnityEngine;
 
-namespace _Infrastructure {
+namespace _Services._RemoteConfig {
     public class DataParserTool {
         private Dictionary<string, object> _data;
         private IKeysStorage _keysStorage;

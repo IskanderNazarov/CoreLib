@@ -1,7 +1,6 @@
 using System;
-using Core._RewardPresenter;
 
-namespace core.rewards {
+namespace _Services._RewardsHandling {
     public interface IRewardPresenter {
         public event Action OnSequenceComplete;
         bool IsRewardingInProgress { get; }

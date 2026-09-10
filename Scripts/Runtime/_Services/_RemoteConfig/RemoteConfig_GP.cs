@@ -1,15 +1,14 @@
 #if GAMEPUSH
 // Файл: RemoteConfig_GP.cs
-using System.Collections;
 using System.Collections.Generic;
-using _Services._Saving;
 using Cysharp.Threading.Tasks;
 using GamePush;
 using UnityEngine;
+
 // Для RCKeysStorage
 // Для IKeysStorage
 
-namespace __CoreGameLib._Scripts._Services._RemoteConfig {
+namespace _Services._RemoteConfig {
     public class RemoteConfig_GP : IRemoteConfig {
 
         private Dictionary<string, string> _configCache;

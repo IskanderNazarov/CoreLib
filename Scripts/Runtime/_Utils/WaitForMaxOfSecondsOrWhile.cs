@@ -1,19 +1,20 @@
 using System;
 using UnityEngine;
 
-public class WaitForMaxOfSecondsOrWhile : CustomYieldInstruction {
-    private readonly float delayTime;
-    private readonly Func<bool> predicate;
+namespace _Utils {
+    public class WaitForMaxOfSecondsOrWhile : CustomYieldInstruction {
+        private readonly float delayTime;
+        private readonly Func<bool> predicate;
 
-    private readonly float startTime;
+        private readonly float startTime;
 
 
-    public WaitForMaxOfSecondsOrWhile(float seconds, Func<bool> predicate) {
-        delayTime = seconds;
-        startTime = Time.time;
-        this.predicate = predicate;
-    }
-    /*public override bool keepWaiting {
+        public WaitForMaxOfSecondsOrWhile(float seconds, Func<bool> predicate) {
+            delayTime = seconds;
+            startTime = Time.time;
+            this.predicate = predicate;
+        }
+        /*public override bool keepWaiting {
         get{
             var b = Time.time - startTime < delayTime;
             if (b) {
@@ -25,9 +26,10 @@ public class WaitForMaxOfSecondsOrWhile : CustomYieldInstruction {
         }
     }*/
 
-    public override bool keepWaiting => Time.time - startTime < delayTime || (predicate?.Invoke() ?? false);
+        public override bool keepWaiting => Time.time - startTime < delayTime || (predicate?.Invoke() ?? false);
 
 
-    public override void Reset() {
+        public override void Reset() {
+        }
     }
 }
