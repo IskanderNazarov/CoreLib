@@ -1,9 +1,8 @@
-#if GAMEPUSH
-﻿using _Data;
-using _Services._PlatformActions;
+﻿#if GAMEPUSH
+using _Data;
 using GamePush;
 
-namespace __CoreGameLib._Scripts {
+namespace _Services._PlatformActions {
     public class PlatformActionProvider_GP : IPlatformActionProvider {
 
         private PlatformActionProvider_GP(ProjectSettings settings) {

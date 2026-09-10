@@ -2,12 +2,11 @@
 // Файл: Core/Services/Lang/PlatformActionProvider_PG.cs
 
 using _Data;
-using _Services._PlatformActions;
 using Playgama;
 using Playgama.Modules.Platform;
 using Zenject;
 
-namespace _Infrastructure {
+namespace _Services._PlatformActions {
     public class PlatformActionProvider_PG : IPlatformActionProvider {
 
         [Inject]
