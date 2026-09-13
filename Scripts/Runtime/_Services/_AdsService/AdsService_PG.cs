@@ -148,6 +148,14 @@ namespace _Services._AdsService {
             }
         }
 
+        public void ShowPreloader(Action onAdClosed) {
+            // Playgama doesn't have a specific preloader API in the Bridge.
+            // Usually, preloader ads are either handled automatically by the platform 
+            // or we could fallback to ShowInterstitial here if needed.
+            // For now, we just pass through.
+            onAdClosed?.Invoke();
+        }
+
         private void PauseGame() {
             OnAdStart?.Invoke();
             Time.timeScale = 0;

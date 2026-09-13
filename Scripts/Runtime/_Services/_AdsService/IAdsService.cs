@@ -17,5 +17,6 @@ namespace _Services._AdsService {
         void Initialize();
         void ShowInterstitial(AdPlacementType placementType, Action onAdClosed);
         void ShowRewarded(Action onRewardGranted, Action onAdClosed);
+        void ShowPreloader(Action onAdClosed);
     }
 }

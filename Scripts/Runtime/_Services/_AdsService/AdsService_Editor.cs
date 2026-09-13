@@ -17,5 +17,9 @@ namespace _Services._AdsService {
             onRewardGranted?.Invoke();
             onAdClosed?.Invoke();
         }
+
+        public void ShowPreloader(Action onAdClosed) {
+            onAdClosed?.Invoke();
+        }
     }
 }

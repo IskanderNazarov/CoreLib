@@ -92,6 +92,34 @@ namespace _Services._AdsService {
             );
         }
 
+        public void ShowPreloader(Action onAdClosed) {
+            if (_isAdShowing) {
+                onAdClosed?.Invoke();
+                return;
+            }
+
+#if UNITY_EDITOR
+            onAdClosed?.Invoke();
+            return;
+#endif
+
+            if (!GP_Ads.IsPreloaderAvailable()) {
+                onAdClosed?.Invoke();
+                return;
+            }
+
+            _isAdShowing = true;
+
+            GP_Ads.ShowPreloader(
+                onPreloaderStart: () => { PauseGame(); },
+                onPreloaderClose: (success) => {
+                    _isAdShowing = false;
+                    ResumeGame();
+                    onAdClosed?.Invoke();
+                }
+            );
+        }
+
         private void PauseGame() {
             OnAdStart?.Invoke();
             Time.timeScale = 0;
