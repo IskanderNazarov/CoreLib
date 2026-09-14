@@ -1,14 +1,22 @@
 ﻿#if GAMEPUSH
 using _Data;
 using GamePush;
+using Zenject;
 
 namespace _Services._PlatformActions {
     public class PlatformActionProvider_GP : IPlatformActionProvider {
+        [Inject] private ProjectSettings _projectSettings;
 
         private PlatformActionProvider_GP(ProjectSettings settings) {
-            PlatformConfig = settings.GetAdConfig(GetCurrentPlatform());
+            _projectSettings = settings;
+        }
+
+        public void Initialize() {
+            PlatformConfig = _projectSettings.GetAdConfig(GetCurrentPlatform());
         }
         
+        public PlatformConfig PlatformConfig { get; private set; }
+
         public string GetISO() {
             return GP_Language.CurrentISO();
         }
@@ -32,8 +40,6 @@ namespace _Services._PlatformActions {
         public bool IsRemoteConfigSupported() {
             return true;
         }
-
-        public PlatformConfig PlatformConfig { get; }
 
         public SupportedPlatform GetCurrentPlatform() {
             // Переводим GamePush.Platform в наш SupportedPlatform

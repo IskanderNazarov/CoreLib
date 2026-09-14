@@ -3,6 +3,7 @@ using _Data;
 using _Services;
 using _Services._AdsService;
 using _Services._Localization;
+using _Services._PlatformActions;
 using _Services._Purchasing;
 using _Services._RemoteConfig;
 using _Services._Saving;
@@ -17,6 +18,7 @@ public class NazCore {
     [Inject] private IPurchaser _purchaser;
     [Inject] private IRemoteConfig _remoteConfig;
     [Inject] private IDataSaver _dataSaver;
+    [Inject] private IPlatformActionProvider _platformActionProvider;
     [Inject] private Localizer _localizer;
     [Inject] private ProjectSettings _projectSettings;
 
@@ -32,10 +34,13 @@ public class NazCore {
         // 1. Инициализация SDK (GamePush / Playgama)
         await InitSDK();
         onServiceProgress?.Invoke("SDK_Initialized", 0.2f);
+        
+        _platformActionProvider.Initialize();
+        onServiceProgress?.Invoke("PlatformActions_Initialized", 0.25f);
 
         // 2. Инициализация AdsService
         _adsService.Initialize();
-        onServiceProgress?.Invoke("AdsService_Initialized", 0.2f);
+        onServiceProgress?.Invoke("AdsService_Initialized", 0.3f);
 
         // 3. Инициализация RemoteConfig
         if (rcKeysStorage != null) {
@@ -72,6 +77,7 @@ public class NazCore {
         // 1. Инициализация SDK (GamePush / Playgama)
         await InitSDK();
         onServiceProgress?.Invoke("SDK_Initialized");
+        _platformActionProvider.Initialize();
 
         // 2. Инициализация AdsService
         _adsService.Initialize();

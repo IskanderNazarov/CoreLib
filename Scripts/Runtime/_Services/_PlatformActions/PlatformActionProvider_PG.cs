@@ -9,13 +9,18 @@ using Zenject;
 namespace _Services._PlatformActions {
     public class PlatformActionProvider_PG : IPlatformActionProvider {
 
+        private ProjectSettings _projectSettings;
         [Inject]
         private PlatformActionProvider_PG(ProjectSettings settings) {
-            PlatformConfig = settings.GetAdConfig(GetCurrentPlatform());
+            _projectSettings = settings;
         }
-        
-        public PlatformConfig PlatformConfig { get; }
-        
+
+        public void Initialize() {
+            PlatformConfig = _projectSettings.GetAdConfig(GetCurrentPlatform());
+        }
+
+        public PlatformConfig PlatformConfig { get; private set; }
+
         public SupportedPlatform GetCurrentPlatform() {
             // Playgama возвращает string. Переводим его в наш SupportedPlatform.
             // Строки нужно сверять с официальной документацией Playgama
