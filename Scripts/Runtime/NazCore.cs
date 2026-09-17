@@ -30,6 +30,7 @@ public class NazCore {
         IKeysStorage rcKeysStorage = null,
         bool iapSupported = false,
         Action<string, float> onServiceProgress = null) {
+        
         onServiceProgress?.Invoke("SDK_Initialize started", 0f);
         // 1. Инициализация SDK (GamePush / Playgama)
         await InitSDK();
@@ -37,6 +38,11 @@ public class NazCore {
         
         _platformActionProvider.Initialize();
         onServiceProgress?.Invoke("PlatformActions_Initialized", 0.25f);
+        
+        // 6. Инициализация SaveManager (загрузка данных через IDataSaver)
+        if (saveManager != null) {
+            await saveManager.Initialize();
+        }
 
         // 2. Инициализация AdsService
         _adsService.Initialize();
@@ -56,11 +62,6 @@ public class NazCore {
         // 5. Инициализация Localizer
         _localizer.Initialize();
         onServiceProgress?.Invoke("Localizer_Initialized", 0.85f);
-
-        // 6. Инициализация SaveManager (загрузка данных через IDataSaver)
-        if (saveManager != null) {
-            await saveManager.Initialize();
-        }
 
         onServiceProgress?.Invoke("DataSaver_Initialized", 1);
     }
