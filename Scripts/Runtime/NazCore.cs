@@ -29,6 +29,7 @@ public class NazCore {
         IAsyncInitializable saveManager,
         IKeysStorage rcKeysStorage = null,
         bool iapSupported = false,
+        bool platformVariableSupported = true,
         Action<string, float> onServiceProgress = null) {
         
         onServiceProgress?.Invoke("SDK_Initialize started", 0f);
@@ -50,7 +51,7 @@ public class NazCore {
 
         // 3. Инициализация RemoteConfig
         if (rcKeysStorage != null) {
-            await _remoteConfig.LoadConfigs(rcKeysStorage);
+            await _remoteConfig.LoadConfigs(rcKeysStorage, platformVariableSupported);
         }
 
         onServiceProgress?.Invoke("RemoteConfig_Initialized", 0.4f);
