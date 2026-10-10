@@ -1,6 +1,6 @@
 {
   "name": "com.nazzalex.corelib",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "Nazzalex Core Library",
   "description": "Base services for web games using plugins Playgama and GamePush",
   "unity": "6000.0",
