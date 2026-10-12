@@ -55,7 +55,16 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<IDataSaver>().To<DataSaver_Editor>().AsSingle();
             Container.BindInterfacesAndSelfTo<AdsService_Editor>().FromNew().AsSingle();
             Container.BindInterfacesAndSelfTo<Purchaser_Editor>().FromNew().AsSingle();
-            
+
+#if GAMEPUSH
+            Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
+            Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
+#elif PLAYGAMA
+            Container.Bind<IRemoteConfig>().To<RemoteConfig_PG>().FromNew().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<LeaderboardService_PG>().AsSingle().NonLazy();
+            Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_PG>().AsSingle().NonLazy();
+#endif
             Container.Bind<IRatingService>().To<RatingService_Editor>().AsSingle().NonLazy();
             Container.Bind<IAchievementsService>().To<AchievementsService_Editor>().AsSingle().NonLazy();
             Container.Bind<ILiveEventsService>().To<LiveEventsService_Editor>().AsSingle().NonLazy();
