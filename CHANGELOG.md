@@ -9,3 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added `LiveEventsService_GP` implementation for GamePush SDK integration.
 - Added `LiveEventsService_PG` stub implementation for Playgama.
 - Added `LiveEventsService_Editor` mock implementation for testing events within the Unity Editor.
+
+## [1.1.1] - 2026-10-10
+### Changed
+- Fixed installing serivce for gp and pg. Binded ILiveEventService to its different implementtions.

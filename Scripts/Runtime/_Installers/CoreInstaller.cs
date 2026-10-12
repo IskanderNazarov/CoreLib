@@ -3,6 +3,7 @@ using _Data;
 using _Services._Achievements;
 using _Services._AdsService;
 using _Services._Analytics;
+using _Services._Events;
 using _Services._Leaderboards;
 using _Services._Localization;
 using _Services._PlatformActions;
@@ -54,19 +55,10 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<IDataSaver>().To<DataSaver_Editor>().AsSingle();
             Container.BindInterfacesAndSelfTo<AdsService_Editor>().FromNew().AsSingle();
             Container.BindInterfacesAndSelfTo<Purchaser_Editor>().FromNew().AsSingle();
-
-#if GAMEPUSH
-            Container.Bind<IRemoteConfig>().To<RemoteConfig_GP>().FromNew().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<LeaderboardService_GP>().AsSingle().NonLazy();
-            Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_GP>().AsSingle().NonLazy();
-#elif PLAYGAMA
-            Container.Bind<IRemoteConfig>().To<RemoteConfig_PG>().FromNew().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<LeaderboardService_PG>().AsSingle().NonLazy();
-            Container.Bind<IPlatformActionProvider>().To<PlatformActionProvider_PG>().AsSingle().NonLazy();
-#endif
+            
             Container.Bind<IRatingService>().To<RatingService_Editor>().AsSingle().NonLazy();
-
             Container.Bind<IAchievementsService>().To<AchievementsService_Editor>().AsSingle().NonLazy();
+            Container.Bind<ILiveEventsService>().To<LiveEventsService_Editor>().AsSingle().NonLazy();
         }
 
 #if PLAYGAMA
@@ -81,6 +73,7 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<IRatingService>().To<RatingService_PG>().AsSingle().NonLazy();
 
             Container.Bind<IAchievementsService>().To<AchievementsService_PG>().AsSingle().NonLazy();
+            Container.Bind<ILiveEventsService>().To<LiveEventsService_PG>().AsSingle().NonLazy();
         }
 #endif
 
@@ -96,6 +89,7 @@ namespace __CoreGameLib._Scripts._Installers {
             Container.Bind<IRatingService>().To<RatingService_GP>().AsSingle().NonLazy();
 
             Container.Bind<IAchievementsService>().To<AchievementsService_GP>().AsSingle().NonLazy();
+            Container.Bind<ILiveEventsService>().To<LiveEventsService_GP>().AsSingle().NonLazy();
         }
 #endif
     }
