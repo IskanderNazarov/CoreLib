@@ -20,7 +20,7 @@ namespace _Services._Purchasing {
         // reports (string productID, bool isRestoringPurchase)
         public event Action<string, bool> OnPurchaseCompletedEvent;
 
-        public bool IsAvailable => Bridge.payments.isSupported;
+        public bool IsAvailable => Bridge.payments.isSupported && _isSupported;
         
         public async UniTask Initialize(bool isSupported) {
             _isSupported = isSupported;
