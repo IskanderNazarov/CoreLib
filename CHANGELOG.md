@@ -13,3 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [1.1.1] - 2026-10-10
 ### Changed
 - Fixed installing serivce for gp and pg. Binded ILiveEventService to its different implementtions.
+
+## [1.1.2] - 2026-10-17
+### Added
+- Searchable AdvancedDropdown for TranslationKeyAttribute property drawer with search filter, mouse scrolling, and alphabetical sorting.
