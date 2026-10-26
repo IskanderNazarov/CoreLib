@@ -17,3 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [1.1.2] - 2026-10-17
 ### Added
 - Searchable AdvancedDropdown for TranslationKeyAttribute property drawer with search filter, mouse scrolling, and alphabetical sorting.
+
+## [1.1.4] - 2026-10-26
+### Changed
+- Fixed `DataSaver_GP.Load` to read synchronized player data after `GP_Init.isReady` without calling `GP_Player.Load()` (prevents extra paid server requests, 5s timeout, and overwriting platform/local fields).
+- Added `IsInitialized` guard in `SaveManager<T>` to prevent saving default data before initialization completes.
+- Added optional `saveImmediate` flag to `IBoosterInventory` and `BoosterInventory`.

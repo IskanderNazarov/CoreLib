@@ -8,7 +8,7 @@ namespace _Services._BoosterInventory {
         int GetCount(TBoosterId id);
         int GetCap(TBoosterId id);
         void SetCap(TBoosterId id, int cap);
-        bool TryAdd(TBoosterId id, int amount, string source);
-        bool TryConsume(TBoosterId id, int amount, string reason);
+        bool TryAdd(TBoosterId id, int amount, string source, bool saveImmediate = true);
+        bool TryConsume(TBoosterId id, int amount, string reason, bool saveImmediate = true);
     }
 }

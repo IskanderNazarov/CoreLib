@@ -23,9 +23,10 @@ namespace _Services._BoosterInventory {
         // --- АБСТРАКТНЫЕ МЕТОДЫ ДЛЯ СЛОЯ GAME ---
         public abstract int GetCount(TBoosterId id);
         protected abstract void SaveCount(TBoosterId id, int newValue);
+        protected virtual void SaveCount(TBoosterId id, int newValue, bool saveImmediate) => SaveCount(id, newValue);
 
-        // --- ЛОГИКА CORE (Осталась без изменений) ---
-        public bool TryAdd(TBoosterId id, int amount, string source) {
+        // --- ЛОГИКА CORE ---
+        public bool TryAdd(TBoosterId id, int amount, string source, bool saveImmediate = true) {
             if (amount <= 0) return false;
             var current = GetCount(id);
             var cap = GetCap(id);
@@ -33,18 +34,18 @@ namespace _Services._BoosterInventory {
             var delta = newValue - current;
             if (delta <= 0) return false;
 
-            SaveCount(id, newValue); // Вызываем абстрактный метод
+            SaveCount(id, newValue, saveImmediate);
             OnChanged?.Invoke(id, delta);
             return true;
         }
 
-        public bool TryConsume(TBoosterId id, int amount, string reason) {
+        public bool TryConsume(TBoosterId id, int amount, string reason, bool saveImmediate = true) {
             if (amount <= 0) return false;
             var current = GetCount(id);
             if (current < amount) return false;
 
             var newValue = current - amount;
-            SaveCount(id, newValue); // Вызываем абстрактный метод
+            SaveCount(id, newValue, saveImmediate);
             OnChanged?.Invoke(id, -amount);
             return true;
         }

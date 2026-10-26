@@ -11,6 +11,7 @@ namespace _Services._Saving {
         protected readonly string _saveKey;
         
         public T Data { get; protected set; }
+        public bool IsInitialized { get; private set; }
         
         private bool _isDirty;
         private float _timer;
@@ -31,12 +32,19 @@ namespace _Services._Saving {
             if (!string.IsNullOrEmpty(json)) {
                 try {
                     json = PreProcessJson(json);
-                    Data = JsonUtility.FromJson<T>(json);
+                    var loaded = JsonUtility.FromJson<T>(json);
+                    if (loaded != null) {
+                        Data = loaded;
+                    }
                 } catch (Exception e) {
                     Debug.LogError($"// error parsing save: {e.Message}");
                     Data = new T();
                 }
             }
+
+            _isDirty = false;
+            _timer = 0f;
+            IsInitialized = true;
         }
         
         // --- ДОБАВЛЕНО: Виртуальный метод, который ничего не делает по умолчанию, 
@@ -48,11 +56,12 @@ namespace _Services._Saving {
         public void MarkDirty() => _isDirty = true;
 
         public void SaveImmediate() {
-            if (!_isDirty) return;
+            if (!IsInitialized || !_isDirty) return;
             ForceSave();
         }
 
         private void ForceSave() {
+            if (!IsInitialized) return;
             var json = JsonUtility.ToJson(Data);
             _dataSaver.Save(_saveKey, json);
             _isDirty = false;
@@ -61,7 +70,7 @@ namespace _Services._Saving {
         }
 
         public void Tick() {
-            if (!_isDirty) return;
+            if (!IsInitialized || !_isDirty) return;
 
             _timer += Time.deltaTime;
             if (_timer >= AUTO_SAVE_DELAY) {

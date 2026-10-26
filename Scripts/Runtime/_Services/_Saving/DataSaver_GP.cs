@@ -5,41 +5,28 @@ using Cysharp.Threading.Tasks;
 using GamePush;
 using GamePush.Data;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace _Services._Saving {
     public class DataSaver_GP : IDataSaver {
         private const float LOAD_TIMEOUT = 5.0f; // max wait time
 
         public async UniTask<string> Load(string key) {
-            var isDone = false;
+            // К моменту GP_Init.isReady SDK GamePush уже загрузил и синхронизировал данные
+            // из выбранного хранилища (например, Облако площадки + Локальное хранилище).
+            // Принудительный вызов GP_Player.Load() не делаем, чтобы:
+            // 1) не тратить платные запросы к серверу GamePush;
+            // 2) не перезатирать непубличные поля пустыми значениями с сервера GamePush;
+            // 3) избежать 5-секундного таймаута при сетевых задержках.
+            if (!GP_Init.isReady) {
+                float elapsedTime = 0f;
+                while (!GP_Init.isReady && elapsedTime < LOAD_TIMEOUT) {
+                    elapsedTime += Time.unscaledDeltaTime;
+                    await UniTask.Yield();
+                }
 
-            UnityAction onComplete = () => {
-                isDone = true;
-            };
-            UnityAction onError = () => {
-                Debug.LogWarning("// DataSaver_GP: Load error callback");
-                isDone = true;
-            };
-
-            GP_Player.OnLoadComplete += onComplete;
-            GP_Player.OnLoadError += onError;
-
-            GP_Player.Load();
-
-            // wait until done or timeout reached
-            float elapsedTime = 0f;
-            while (!isDone && elapsedTime < LOAD_TIMEOUT) {
-                // Используем unscaledDeltaTime на случай, если игра в момент загрузки стоит на паузе (Time.timeScale == 0)
-                elapsedTime += Time.unscaledDeltaTime;
-                await UniTask.Yield(); // Ждем следующий кадр
-            }
-
-            GP_Player.OnLoadComplete -= onComplete;
-            GP_Player.OnLoadError -= onError;
-
-            if (!isDone) {
-                Debug.LogWarning($"// DataSaver_GP: Load timed out after {LOAD_TIMEOUT}s");
+                if (!GP_Init.isReady) {
+                    Debug.LogWarning($"// DataSaver_GP: GP_Init.isReady timed out after {LOAD_TIMEOUT}s");
+                }
             }
 
             return GP_Player.GetString(key);
