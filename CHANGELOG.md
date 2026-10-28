@@ -18,6 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Searchable AdvancedDropdown for TranslationKeyAttribute property drawer with search filter, mouse scrolling, and alphabetical sorting.
 
+## [1.1.5] - 2026-10-28
+### Fixed
+- Fixed Purchaser_PG: initialized productsInfo list by default and added null-safe check in GetProdInfoByID to prevent ArgumentNullException when payments are unsupported or uninitialized.
+
 ## [1.1.4] - 2026-10-26
 ### Changed
 - Fixed `DataSaver_GP.Load` to read synchronized player data after `GP_Init.isReady` without calling `GP_Player.Load()` (prevents extra paid server requests, 5s timeout, and overwriting platform/local fields).

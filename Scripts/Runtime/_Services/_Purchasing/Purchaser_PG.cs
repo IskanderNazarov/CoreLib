@@ -15,7 +15,7 @@ namespace _Services._Purchasing {
         private bool _isInitialized;
         private bool _isGetPurchaseCompleted;
         private bool _isSupported;
-        public List<ProductInfo> productsInfo { get; private set; }
+        public List<ProductInfo> productsInfo { get; private set; } = new List<ProductInfo>();
 
         // reports (string productID, bool isRestoringPurchase)
         public event Action<string, bool> OnPurchaseCompletedEvent;
@@ -114,7 +114,7 @@ namespace _Services._Purchasing {
 
         //--------------------------------------------------------------------------
         public ProductInfo GetProdInfoByID(string id) {
-            return productsInfo.FirstOrDefault(p => p.id == id);
+            return productsInfo?.FirstOrDefault(p => p.id == id);
         }
 
         public void ConsumePurchase(string id) {
