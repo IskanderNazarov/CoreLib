@@ -19,9 +19,12 @@ namespace _Services._Localization {
         public Localizer(ProjectSettings projectSettings, IPlatformActionProvider platformActionProvider) {
             _localesSettings = projectSettings.LocalesSettings;
             _platformActionProvider = platformActionProvider;
-            foreach (var loc in _localesSettings.Locales) {
-                loc.Initialize();
-                _locales[loc.language] = loc;
+
+            if (_localesSettings != null) {
+                foreach (var loc in _localesSettings.Locales) {
+                    loc.Initialize();
+                    _locales[loc.language] = loc;
+                }
             }
         }
 

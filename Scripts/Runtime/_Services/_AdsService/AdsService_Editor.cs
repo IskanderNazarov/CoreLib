@@ -11,6 +11,7 @@ namespace _Services._AdsService {
         public void ShowInterstitial(AdPlacementType placementType, Action onAdClosed) {
             OnAdStart?.Invoke();
             OnResumeToGameAfterAd?.Invoke();
+            onAdClosed?.Invoke();
         }
 
         public void ShowRewarded(Action onRewardGranted, Action onAdClosed) {
