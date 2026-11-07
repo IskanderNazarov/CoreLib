@@ -112,19 +112,7 @@ namespace Core.Editor {
         /// Finds and updates the ProjectSettings ScriptableObject located in Resources.
         /// </summary>
         public static void UpdateProjectSettingsAsset(SDK_Type sdkType) {
-            ProjectSettings settings = Resources.Load<ProjectSettings>("ProjectSettings");
-
-            if (settings == null) {
-                string[] guids = AssetDatabase.FindAssets("t:ProjectSettings");
-                foreach (string guid in guids) {
-                    string path = AssetDatabase.GUIDToAssetPath(guid);
-                    var asset = AssetDatabase.LoadAssetAtPath<ProjectSettings>(path);
-                    if (asset != null) {
-                        settings = asset;
-                        break;
-                    }
-                }
-            }
+            ProjectSettings settings = GetProjectSettingsAsset();
 
             if (settings != null) {
                 if (settings.SDKType != sdkType) {
@@ -138,6 +126,38 @@ namespace Core.Editor {
             } else {
                 Debug.LogWarning("[BuildPlatformSwitcher] Could not find ProjectSettings.asset in Resources or project! Please make sure it exists.");
             }
+        }
+
+        /// <summary>
+        /// Updates the Direct Yandex Metrika Bridge setting on ProjectSettings.asset.
+        /// </summary>
+        public static void SetDirectYandexMetrica(bool enabled, long counterId = 0) {
+            ProjectSettings settings = GetProjectSettingsAsset();
+            if (settings != null) {
+                Undo.RecordObject(settings, "Change Yandex Metrika Settings");
+                settings.UseDirectYandexMetricaBridge = enabled;
+                if (counterId > 0 || !enabled) {
+                    settings.YandexMetricaCounterId = counterId;
+                }
+                EditorUtility.SetDirty(settings);
+                AssetDatabase.SaveAssets();
+                Debug.Log($"[BuildPlatformSwitcher] Yandex Metrika Bridge updated: Enabled = {enabled}, CounterId = {settings.YandexMetricaCounterId}");
+            }
+        }
+
+        public static ProjectSettings GetProjectSettingsAsset() {
+            ProjectSettings settings = Resources.Load<ProjectSettings>("ProjectSettings");
+            if (settings == null) {
+                string[] guids = AssetDatabase.FindAssets("t:ProjectSettings");
+                foreach (string guid in guids) {
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    var asset = AssetDatabase.LoadAssetAtPath<ProjectSettings>(path);
+                    if (asset != null) {
+                        return asset;
+                    }
+                }
+            }
+            return settings;
         }
 
         /// <summary>

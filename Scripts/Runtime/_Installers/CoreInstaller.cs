@@ -28,20 +28,32 @@ namespace __CoreGameLib._Scripts._Installers {
             _analyticsServices.Add(new ConsoleAnalyticsService());
             InstallFor_Editor();
 #else
+            if (_projectSettings != null && _projectSettings.UseDirectYandexMetricaBridge) {
+                _analyticsServices.Add(new YandexMetricaAnalyticsService(_projectSettings.YandexMetricaCounterId));
+            } else {
+#if PLAYGAMA
+                if (_projectSettings.SDKType == SDK_Type.Playgama) {
+                    //_analyticsServices.Add(new PlaygamaAnalyticsService());
+                }
+#endif
+#if GAMEPUSH
+                if (_projectSettings.SDKType == SDK_Type.GamePush) {
+                    _analyticsServices.Add(new GamePushAnalyticsService());
+                }
+#endif
+            }
+
 #if PLAYGAMA
             if (_projectSettings.SDKType == SDK_Type.Playgama) {
-                //_analyticsServices.Add(new PlaygamaAnalyticsService());
                 InstallFor_Playgama();
             }
 #endif
 #if GAMEPUSH
             if (_projectSettings.SDKType == SDK_Type.GamePush) {
-                _analyticsServices.Add(new GamePushAnalyticsService());
                 InstallFor_GamePush();
             }
 #endif
 #endif
-
 
             Container.Bind<NazCore>().FromNew().AsSingle().NonLazy();
             Container.Bind<Localizer>().FromNew().AsSingle().NonLazy();

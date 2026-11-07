@@ -11,7 +11,7 @@ namespace Core.Editor {
         [MenuItem("Tools/NazoCore/SDK Platform Switcher", priority = 100)]
         public static void Open() {
             var window = GetWindow<BuildPlatformSwitcherWindow>("SDK Switcher");
-            window.minSize = new Vector2(380, 260);
+            window.minSize = new Vector2(380, 360);
             window.Show();
         }
 
@@ -38,14 +38,7 @@ namespace Core.Editor {
         }
 
         private void RefreshSettings() {
-            _cachedSettings = Resources.Load<ProjectSettings>("ProjectSettings");
-            if (_cachedSettings == null) {
-                string[] guids = AssetDatabase.FindAssets("t:ProjectSettings");
-                if (guids.Length > 0) {
-                    string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                    _cachedSettings = AssetDatabase.LoadAssetAtPath<ProjectSettings>(path);
-                }
-            }
+            _cachedSettings = BuildPlatformSwitcher.GetProjectSettingsAsset();
         }
 
         private void OnGUI() {
@@ -103,6 +96,46 @@ namespace Core.Editor {
 
             GUI.backgroundColor = Color.white;
             EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space(15);
+
+            // Analytics Section
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.LabelField("Analytics Configuration", EditorStyles.boldLabel);
+
+            if (_cachedSettings != null) {
+                EditorGUI.BeginChangeCheck();
+
+                bool useDirectBridge = EditorGUILayout.ToggleLeft(
+                    new GUIContent(" Send analytics via Direct Yandex Metrika (jslib bridge)",
+                    "Sends events with full dictionary parameters (level, coins, etc.) directly to Yandex Metrika via jslib bridge instead of GamePush/Playgama goal API."),
+                    _cachedSettings.UseDirectYandexMetricaBridge);
+
+                long counterId = _cachedSettings.YandexMetricaCounterId;
+                if (useDirectBridge) {
+                    counterId = EditorGUILayout.LongField(
+                        new GUIContent("Counter ID (0 = Auto)", "Optional custom counter ID. If 0, bridge will auto-detect window.yandexMetricaCounterId."),
+                        _cachedSettings.YandexMetricaCounterId);
+                }
+
+                if (EditorGUI.EndChangeCheck()) {
+                    Undo.RecordObject(_cachedSettings, "Change Analytics Metrika Bridge Settings");
+                    _cachedSettings.UseDirectYandexMetricaBridge = useDirectBridge;
+                    _cachedSettings.YandexMetricaCounterId = counterId;
+                    EditorUtility.SetDirty(_cachedSettings);
+                    AssetDatabase.SaveAssets();
+                }
+
+                if (_cachedSettings.UseDirectYandexMetricaBridge) {
+                    EditorGUILayout.HelpBox("Direct Yandex Metrika Bridge is ACTIVE.\nEvents will be sent directly via window.ym with rich parameter payloads in WebGL builds.", MessageType.Info);
+                } else {
+                    EditorGUILayout.HelpBox("Standard SDK analytics is ACTIVE (GamePush Goal / Playgama).", MessageType.None);
+                }
+            } else {
+                EditorGUILayout.HelpBox("ProjectSettings.asset not found. Please create or locate it in Resources.", MessageType.Warning);
+            }
+
+            EditorGUILayout.EndVertical();
 
             EditorGUILayout.Space(15);
 

@@ -47,13 +47,17 @@ namespace _Data {
         
         public LocalesSettings LocalesSettings;
 
+        [Header("Analytics Settings")]
+        [Tooltip("If enabled, events will be sent directly to Yandex Metrika via jslib bridge with full parameters.")]
+        public bool UseDirectYandexMetricaBridge = false;
+        [Tooltip("Optional custom Yandex Metrika Counter ID (leave 0 to use window.yandexMetricaCounterId or auto-detected).")]
+        public long YandexMetricaCounterId = 0;
+
         // Метод для быстрого получения конфига
         public PlatformConfig GetAdConfig(SupportedPlatform currentPlatform) {
             var config = platformAdConfigs.Find(c => c.platform == currentPlatform);
             return config ?? defaultConfig;
         }
-        
-        
     }
     
     public enum SDK_Type {
