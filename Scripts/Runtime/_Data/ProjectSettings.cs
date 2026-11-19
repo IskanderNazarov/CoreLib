@@ -53,6 +53,12 @@ namespace _Data {
         [Tooltip("Optional custom Yandex Metrika Counter ID (leave 0 to use window.yandexMetricaCounterId or auto-detected).")]
         public long YandexMetricaCounterId = 0;
 
+        [Header("Editor Live Events Testing")]
+        [Tooltip("Controls how live events behave when running inside Unity Editor.")]
+        public EditorEventMode EditorEventMode = EditorEventMode.Disabled;
+        [Tooltip("Event ID used in Unity Editor when EditorEventMode is MockActiveEvent (e.g., halloween_2026, new_year_2027).")]
+        public string EditorTestEventId = "";
+
         // Метод для быстрого получения конфига
         public PlatformConfig GetAdConfig(SupportedPlatform currentPlatform) {
             var config = platformAdConfigs.Find(c => c.platform == currentPlatform);
@@ -63,5 +69,10 @@ namespace _Data {
     public enum SDK_Type {
         Playgama, 
         GamePush
+    }
+
+    public enum EditorEventMode {
+        Disabled,
+        MockActiveEvent
     }
 }

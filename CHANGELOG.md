@@ -3,6 +3,12 @@ All notable changes to this package will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.8] - 2026-11-19
+### Changed
+- Added `EditorEventMode` (`Disabled`, `MockActiveEvent`) and `EditorTestEventId` to `ProjectSettings` for controlling editor live event simulation without hardcoding `"TEST_EVENT"`.
+- Updated `LiveEventsService_Editor` to dynamically sync mock events from `ProjectSettings`.
+- Hardened `LiveEventsService_GP` date parsing (`CultureInfo.InvariantCulture`) and added `IDisposable`.
+
 ## [1.1.0] - 2026-10-10
 ### Added
 - Added `ILiveEventsService` for handling in-game events.

@@ -1,12 +1,13 @@
 #if GAMEPUSH
 using System;
+using System.Globalization;
 using System.Linq;
 using GamePush;
 using Cysharp.Threading.Tasks;
 
 namespace _Services._Events 
 {
-    public class LiveEventsService_GP : ILiveEventsService 
+    public class LiveEventsService_GP : ILiveEventsService, IDisposable 
     {
         public event Action<string> OnEventStarted;
         public event Action<string> OnEventEnded;
@@ -15,6 +16,11 @@ namespace _Services._Events
         public LiveEventsService_GP() 
         {
             GP_Events.OnEventJoin += OnGPEventJoin;
+        }
+
+        public void Dispose() 
+        {
+            GP_Events.OnEventJoin -= OnGPEventJoin;
         }
 
         ~LiveEventsService_GP() 
@@ -108,8 +114,8 @@ namespace _Services._Events
         {
             if (gpEvent == null) return null;
             
-            DateTime.TryParse(gpEvent.dateStart, out DateTime start);
-            DateTime.TryParse(gpEvent.dateEnd, out DateTime end);
+            DateTime.TryParse(gpEvent.dateStart, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out DateTime start);
+            DateTime.TryParse(gpEvent.dateEnd, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out DateTime end);
             
             return new LiveEventData 
             {
